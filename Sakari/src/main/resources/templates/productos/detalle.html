@@ -33,7 +33,7 @@
                 <!-- Imagen del Producto -->
                 <div>
                     <div style="background-color: var(--white); padding: 2rem; border-radius: 10px; box-shadow: var(--shadow);">
-                        <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/images/placeholder.jpg'}" 
+                        <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/img/placeholder.jpg'}" 
                              th:alt="${producto.nombre}"
                              style="width: 100%; max-height: 500px; object-fit: contain;"
                              onerror="this.src='https://via.placeholder.com/500x500/8b5e9f/ffffff?text=Producto+Sublimado'">

@@ -48,7 +48,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Recursos públicos
                 .requestMatchers("/", "/inicio", "/home", "/registro", "/login", "/error").permitAll()
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico").permitAll()
                 .requestMatchers("/productos", "/productos/**").permitAll()
                 .requestMatchers("/contacto", "/quienes-somos").permitAll()
                 .requestMatchers("/politicas-privacidad", "/terminos-condiciones").permitAll()
