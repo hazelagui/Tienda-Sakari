@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Sakari | Sublimados Personalizados</title>
+    <meta name="description" content="Sakari - Confección y personalización de productos únicos sublimados que reflejan tu estilo. Tazas, camisas, gorras, uniformes y más.">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Barra de Navegación -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a th:href="@{/}">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-text" style="display:none;">SAKARI</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a th:href="@{/inicio}" class="active">Inicio</a></li>
+                <li><a th:href="@{/productos}">Productos</a></li>
+                <li><a th:href="@{/personalizaciones}">Personalizaciones</a></li>
+                <li><a th:href="@{/quienes-somos}">¿Quiénes somos?</a></li>
+                <li><a th:href="@{/contacto}">Contáctenos</a></li>
+                <li><a th:href="@{/login}" class="btn-login"><i class="fas fa-user"></i> Iniciar Sesión</a></li>
+                <li><a th:href="@{/carrito}" class="btn-cart"><i class="fas fa-shopping-cart"></i> Carrito</a></li>
+            </ul>
+            
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner Principal -->
+    <section class="hero-banner">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>¡Refleja Tu Estilo!</h1>
+                <p>Confección y personalización de productos únicos que reflejan tu estilo.</p>
+            </div>
+            <div class="hero-images">
+                <img th:src="@{/images/uniforme-deportivo.jpg}" alt="Uniforme deportivo sublimado" 
+                     onerror="this.src='https://via.placeholder.com/300x400/00d4ff/ffffff?text=Uniforme+Deportivo'">
+                <img th:src="@{/images/tazas-star-wars.jpg}" alt="Tazas personalizadas Star Wars" 
+                     onerror="this.src='https://via.placeholder.com/300x200/8b5e9f/ffffff?text=Tazas+Personalizadas'">
+                <img th:src="@{/images/bolso-personalizado.jpg}" alt="Bolso personalizado" 
+                     onerror="this.src='https://via.placeholder.com/300x200/00d4ff/ffffff?text=Bolsos'">
+                <img th:src="@{/images/productos-varios.jpg}" alt="Productos varios" 
+                     onerror="this.src='https://via.placeholder.com/300x200/8b5e9f/ffffff?text=Más+Productos'">
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Estadísticas -->
+    <section class="stats-section">
+        <div class="container">
+            <h2>Estamos orgullosos de nuestros números</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">Años de experiencia</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10k</div>
+                    <div class="stat-label">Productos realizados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">+10</div>
+                    <div class="stat-label">Tipos de personalización</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Búsqueda -->
+    <section class="search-section">
+        <div class="container">
+            <form th:action="@{/productos}" method="get" class="search-form">
+                <input type="text" name="busqueda" placeholder="Buscar productos sublimados..." class="search-input">
+                <button type="submit" class="btn btn-search"><i class="fas fa-search"></i> Buscar</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Categorías de Productos Sublimados -->
+    <section class="categories-section">
+        <div class="container">
+            <h2 class="section-title">Nuestras Categorías</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">
+                Productos sublimados de alta calidad para todas tus necesidades
+            </p>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <a th:href="@{/productos(categoria='camisas')}">
+                        <div class="category-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <h3>Camisas</h3>
+                        <p>Camisas sublimadas con diseños personalizados en poliéster de alta calidad</p>
+                    </a>
+                </div>
+                
+                <div class="category-card">
+                    <a th:href="@{/productos(categoria='tazas')}">
+                        <div class="category-icon">
+                            <i class="fas fa-mug-hot"></i>
+                        </div>
+                        <h3>Tazas</h3>
+                        <p>Tazas sublimables con tus diseños favoritos, resistentes al lavado</p>
+                    </a>
+                </div>
+                
+                <div class="category-card">
+                    <a th:href="@{/productos(categoria='gorras')}">
+                        <div class="category-icon">
+                            <i class="fas fa-hat-cowboy"></i>
+                        </div>
+                        <h3>Gorras</h3>
+                        <p>Gorras personalizadas con sublimación de alta definición</p>
+                    </a>
+                </div>
+                
+                <div class="category-card">
+                    <a th:href="@{/productos(categoria='uniformes')}">
+                        <div class="category-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <h3>Uniformes</h3>
+                        <p>Uniformes deportivos completos con sublimación profesional</p>
+                    </a>
+                </div>
+                
+                <div class="category-card">
+                    <a th:href="@{/productos(categoria='sueter')}">
+                        <div class="category-icon">
+                            <i class="fas fa-mitten"></i>
+                        </div>
+                        <h3>Suéter</h3>
+                        <p>Suéteres cómodos con diseños sublimados personalizados</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos Destacados -->
+    <section class="products-section">
+        <div class="container">
+            <h2 class="section-title">Productos Destacados</h2>
+            <div class="products-grid" th:if="${productos != null && !productos.isEmpty()}">
+                <div class="product-card" th:each="producto : ${productos}" th:if="${productoStat.index < 6}">
+                    <div class="product-image">
+                        <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/images/placeholder.jpg'}" 
+                             th:alt="${producto.nombre}"
+                             onerror="this.src='https://via.placeholder.com/300x300/8b5e9f/ffffff?text=Producto+Sublimado'">
+                        <span class="badge-personalizable" th:if="${producto.personalizable}">Personalizable</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
+                        <p class="product-description" th:text="${producto.descripcion}">Descripción del producto sublimado</p>
+                        <div class="product-footer">
+                            <span class="price" th:text="'₡' + ${#numbers.formatDecimal(producto.precio, 0, 2)}">₡0.00</span>
+                            <div class="product-actions">
+                                <a th:href="@{/productos/{id}(id=${producto.id})}" class="btn btn-sm btn-secondary">Ver</a>
+                                <form th:action="@{/carrito/agregar}" method="post" style="display: inline;">
+                                    <input type="hidden" name="productoId" th:value="${producto.id}">
+                                    <input type="hidden" name="cantidad" value="1">
+                                    <button type="submit" class="btn btn-sm btn-primary" th:disabled="${!producto.tieneStock()}">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div th:if="${productos == null || productos.isEmpty()}" class="no-products">
+                <i class="fas fa-box-open"></i>
+                <p>Próximamente tendremos productos sublimados disponibles</p>
+            </div>
+            
+            <div class="text-center" style="margin-top: 2rem;">
+                <a th:href="@{/productos}" class="btn btn-primary">Ver Todos los Productos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Características de Sublimación -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">¿Por qué elegir Sakari?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Sublimación de Alta Calidad</h3>
+                    <p>Utilizamos tecnología de sublimación de última generación para resultados duraderos</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Diseños Personalizados</h3>
+                    <p>Trae tu diseño o trabajamos contigo para crear algo único</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Garantía de Durabilidad</h3>
+                    <p>Nuestros productos sublimados resisten lavados sin perder color</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Entrega Rápida</h3>
+                    <p>Procesos eficientes para que recibas tus productos a tiempo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pie de Página -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="footer-logo"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <h3 class="footer-logo-text" style="display:none;">SAKARI</h3>
+                    <p class="footer-description">Productos sublimados únicos y personalizados que reflejan tu estilo</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-phone"></i> <a href="tel:+50688735743">+506 8873 5743</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#9df4f3fbf2ddeee8fff1f4f0fcfef4f2f3b3fef2f0"><span class="__cf_email__" data-cfemail="89e0e7efe6c9fafcebe5e0e4e8eae0e6e7a7eae6e4">[email&#160;protected]</span></a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> La Aurora de Heredia, Costa Rica</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Información</h4>
+                    <ul class="footer-links">
+                        <li><a th:href="@{/quienes-somos}">Quiénes Somos</a></li>
+                        <li><a th:href="@{/politicas-privacidad}">Políticas de Privacidad</a></li>
+                        <li><a th:href="@{/terminos-condiciones}">Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="https://facebook.com/sakari" target="_blank" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com/sakari" target="_blank" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025-2028 Todos los derechos reservados | Sakari - Sublim

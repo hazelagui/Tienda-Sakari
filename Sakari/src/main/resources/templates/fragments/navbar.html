@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <nav class="navbar" th:fragment="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a th:href="@{/}">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-text" style="display:none;">SAKARI</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a th:href="@{/inicio}">Inicio</a></li>
+                <li><a th:href="@{/productos}">Productos</a></li>
+                <li><a th:href="@{/personalizaciones}">Personalizaciones</a></li>
+                <li><a th:href="@{/quienes-somos}">¿Quiénes Somos?</a></li>
+                <li><a th:href="@{/contacto}">Contáctenos</a></li>
+                
+                <!-- Mostrar si NO está autenticado -->
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" class="btn-login">
+                        <i class="fas fa-user"></i> Iniciar Sesión
+                    </a>
+                </li>
+                
+                <!-- Mostrar si ESTÁ autenticado -->
+                <li sec:authorize="isAuthenticated()">
+                    <a href="#" class="btn-login">
+                        <i class="fas fa-user"></i> 
+                        <span sec:authentication="name"></span>
+                    </a>
+                </li>
+                
+                <!-- Panel de Admin (solo para ADMIN) -->
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin}" class="btn-login">
+                        <i class="fas fa-cog"></i> Admin
+                    </a>
+                </li>
+                
+                <!-- Carrito -->
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/carrito}" class="btn-cart">
+                        <i class="fas fa-shopping-cart"></i> Carrito
+                    </a>
+                </li>
+                
+                <!-- Cerrar sesión -->
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit" class="btn-login" style="background: #e74c3c;">
+                            <i class="fas fa-sign-out-alt"></i> Salir
+                        </button>
+                    </form>
+                </li>
+            </ul>
+            
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

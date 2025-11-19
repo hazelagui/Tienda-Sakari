@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - Sakari</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a th:href="@{/}">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-text" style="display:none;">SAKARI</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a th:href="@{/inicio}">Inicio</a></li>
+                <li><a th:href="@{/productos}">Productos</a></li>
+                <li><a th:href="@{/personalizaciones}">Personalizaciones</a></li>
+                <li><a th:href="@{/quienes-somos}">¿Quiénes Somos?</a></li>
+                <li><a th:href="@{/contacto}">Contáctenos</a></li>
+                <li><a th:href="@{/login}" class="btn-login"><i class="fas fa-user"></i> Iniciar Sesión</a></li>
+                <li><a th:href="@{/carrito}" class="btn-cart active"><i class="fas fa-shopping-cart"></i> Carrito</a></li>
+            </ul>
+            
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-shopping-cart"></i> Mi Carrito</h1>
+            </div>
+
+            <div th:if="${mensaje}" class="alert alert-success">
+                <span th:text="${mensaje}"></span>
+            </div>
+
+            <div th:if="${error}" class="alert alert-error">
+                <span th:text="${error}"></span>
+            </div>
+
+            <div th:if="${carrito != null && carrito.items != null && !carrito.items.isEmpty()}">
+                <div class="cart-container">
+                    <div class="cart-items">
+                        <div class="cart-item" th:each="item : ${carrito.items}">
+                            <div class="cart-item-image">
+                                <img th:src="${item.producto.imagenUrl != null ? item.producto.imagenUrl : '/images/placeholder.jpg'}" 
+                                     th:alt="${item.producto.nombre}"
+                                     onerror="this.src='/images/placeholder.jpg'">
+                            </div>
+                            <div class="cart-item-details">
+                                <h3 th:text="${item.producto.nombre}">Nombre del Producto</h3>
+                                <p class="cart-item-description" th:text="${item.producto.descripcion}">Descripción</p>
+                                <p class="cart-item-price">
+                                    Precio unitario: <span th:text="'₡' + ${#numbers.formatDecimal(item.precioUnitario, 0, 2)}"></span>
+                                </p>
+                                <div th:if="${item.personalizacion != null && !item.personalizacion.isEmpty()}" class="cart-item-custom">
+                                    <i class="fas fa-paint-brush"></i> 
+                                    <strong>Personalización:</strong> <span th:text="${item.personalizacion}"></span>
+                                </div>
+                            </div>
+                            <div class="cart-item-quantity">
+                                <form th:action="@{/carrito/actualizar/{id}(id=${item.id})}" method="post" class="quantity-form">
+                                    <label>Cantidad:</label>
+                                    <div class="quantity-controls">
+                                        <input type="number" name="cantidad" th:value="${item.cantidad}" 
+                                               min="1" max="99" class="quantity-input">
+                                        <button type="submit" class="btn btn-sm btn-secondary">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="cart-item-subtotal">
+                                <p class="subtotal-label">Subtotal:</p>
+                                <p class="subtotal-amount" th:text="'₡' + ${#numbers.formatDecimal(item.subtotal, 0, 2)}">₡0.00</p>
+                            </div>
+                            <div class="cart-item-actions">
+                                <form th:action="@{/carrito/eliminar/{id}(id=${item.id})}" method="post">
+                                    <button type="submit" class="btn btn-sm btn-danger" 
+                                            onclick="return confirm('¿Estás seguro de eliminar este producto?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cart-summary">
+                        <h2>Resumen del Pedido</h2>
+                        <div class="summary-row">
+                            <span>Productos (<span th:text="${carrito.cantidadTotalItems}">0</span>):</span>
+                            <span th:text="'₡' + ${#numbers.formatDecimal(total, 0, 2)}">₡0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Envío:</span>
+                            <span>Por calcular</span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-row summary-total">
+                            <span><strong>Total:</strong></span>
+                            <span><strong th:text="'₡' + ${#numbers.formatDecimal(total, 0, 2)}">₡0.00</strong></span>
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="alert('Función de checkout en desarrollo')">
+                            <i class="fas fa-credit-card"></i> Proceder al Pago
+                        </button>
+                        <form th:action="@{/carrito/limpiar}" method="post" style="margin-top: 1rem;">
+                            <button type="submit" class="btn btn-secondary btn-block" 
+                                    onclick="return confirm('¿Estás seguro de vaciar el carrito?')">
+                                <i class="fas fa-trash-alt"></i> Vaciar Carrito
+                            </button>
+                        </form>
+                        <a th:href="@{/productos}" class="btn btn-secondary btn-block" style="margin-top: 1rem;">
+                            <i class="fas fa-arrow-left"></i> Seguir Comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${carrito == null || carrito.items == null || carrito.items.isEmpty()}" class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <h2>Tu carrito está vacío</h2>
+                <p>Agrega productos para comenzar tu compra</p>
+                <a th:href="@{/productos}" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag"></i> Ver Productos
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="footer-logo"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <h3 class="footer-logo-text" style="display:none;">SAKARI</h3>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-phone"></i> <a href="tel:+50612345678">+506 1234-5678</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#21484f474e6152404a4053480f424e4c"><span class="__cf_email__" data-cfemail="1a73747c755a697b717b687334797577">[email&#160;protected]</span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Sakari. Todos los derechos re

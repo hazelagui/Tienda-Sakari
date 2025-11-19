@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head th:replace="~{fragments/head :: head('Productos')}"></head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-shopping-bag"></i> Nuestros Productos</h1>
+                <p>Productos sublimados de alta calidad</p>
+            </div>
+
+            <!-- Mensajes -->
+            <div th:if="${mensaje}" class="alert alert-success">
+                <span th:text="${mensaje}"></span>
+            </div>
+
+            <div th:if="${error}" class="alert alert-error">
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- Filtros y búsqueda -->
+            <section class="filters-section">
+                <form th:action="@{/productos}" method="get" class="filters-form">
+                    <div class="filter-group">
+                        <label for="categoriaId">
+                            <i class="fas fa-tag"></i> Categoría
+                        </label>
+                        <select id="categoriaId" name="categoriaId" onchange="this.form.submit()">
+                            <option value="">Todas las categorías</option>
+                            <option th:each="categoria : ${categorias}" 
+                                    th:value="${categoria.id}" 
+                                    th:text="${categoria.nombre}"
+                                    th:selected="${categoriaSeleccionada != null && categoriaSeleccionada.id == categoria.id}">
+                                Categoría
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="busqueda">
+                            <i class="fas fa-search"></i> Buscar producto
+                        </label>
+                        <input type="text" id="busqueda" name="busqueda" 
+                               th:value="${busqueda}"
+                               placeholder="Buscar por nombre o descripción...">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+
+                    <a th:href="@{/productos}" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Limpiar
+                    </a>
+                </form>
+            </section>
+
+            <!-- Información de filtros aplicados -->
+            <div th:if="${categoriaSeleccionada != null}" style="margin: 1rem 0; padding: 1rem; background-color: var(--bg-color); border-radius: 5px;">
+                <p style="margin: 0;">
+                    Mostrando productos de: <strong th:text="${categoriaSeleccionada.nombre}">Categoría</strong>
+                    <a th:href="@{/productos}" style="margin-left: 1rem; color: var(--secondary-color);">
+                        <i class="fas fa-times"></i> Quitar filtro
+                    </a>
+                </p>
+            </div>
+
+            <div th:if="${busqueda != null && !busqueda.isEmpty()}" style="margin: 1rem 0; padding: 1rem; background-color: var(--bg-color); border-radius: 5px;">
+                <p style="margin: 0;">
+                    Resultados de búsqueda para: <strong th:text="${busqueda}">término</strong>
+                    <a th:href="@{/productos}" style="margin-left: 1rem; color: var(--secondary-color);">
+                        <i class="fas fa-times"></i> Quitar búsqueda
+                    </a>
+                </p>
+            </div>
+
+            <!-- Grid de productos -->
+            <section class="products-section">
+                <div class="products-grid" th:if="${productos != null && !productos.isEmpty()}">
+                    <div class="product-card" th:each="producto : ${productos}">
+                        <div class="product-image">
+                            <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/images/placeholder.jpg'}" 
+                                 th:alt="${producto.nombre}"
+                                 onerror="this.src='https://via.placeholder.com/300x300/8b5e9f/ffffff?text=Producto+Sublimado'">
+                            <span class="badge-personalizable" th:if="${producto.personalizable}">
+                                <i class="fas fa-paint-brush"></i> Personalizable
+                            </span>
+                            <span class="badge-agotado" th:unless="${producto.tieneStock()}">
+                                Agotado
+                            </span>
+                        </div>
+                        <div class="product-info">
+                            <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
+                            <p class="product-description" th:text="${producto.descripcion}">
+                                Descripción del producto sublimado
+                            </p>
+                            <p class="product-stock" th:if="${producto.tieneStock()}">
+                                <i class="fas fa-check-circle"></i> 
+                                En stock: <span th:text="${producto.stock}">0</span>
+                            </p>
+                            <p class="product-stock" th:unless="${producto.tieneStock()}" style="color: var(--accent-color);">
+                                <i class="fas fa-times-circle"></i> Sin stock
+                            </p>
+                            <div class="product-footer">
+                                <span class="price" th:text="'₡' + ${#numbers.formatDecimal(producto.precio, 0, 2)}">₡0.00</span>
+                                <div class="product-actions">
+                                    <a th:href="@{/productos/{id}(id=${producto.id})}" 
+                                       class="btn btn-sm btn-secondary"
+                                       title="Ver detalles">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
+                                    <form th:action="@{/carrito/agregar}" method="post" 
+                                          style="display: inline;"
+                                          sec:authorize="isAuthenticated()">
+                                        <input type="hidden" name="productoId" th:value="${producto.id}">
+                                        <input type="hidden" name="cantidad" value="1">
+                                        <button type="submit" 
+                                                class="btn btn-sm btn-primary" 
+                                                th:disabled="${!producto.tieneStock()}"
+                                                title="Agregar al carrito">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </button>
+                                    </form>
+                                    <a th:href="@{/login}" 
+                                       class="btn btn-sm btn-primary"
+                                       sec:authorize="!isAuthenticated()"
+                                       title="Iniciar sesión para comprar">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sin resultados -->
+                <div th:if="${productos == null || productos.isEmpty()}" class="no-products">
+                    <i class="fas fa-box-open"></i>
+                    <h2>No se encontraron productos</h2>
+                    <p th:if="${busqueda != null && !busqueda.isEmpty()}">
+                        No hay productos que coincidan con "<span th:text="${busqueda}"></span>"
+                    </p>
+                    <p th:if="${categoriaSeleccionada != null}">
+                        No hay productos en la categoría "<span th:text="${categoriaSeleccionada.nombre}"></span>"
+                    </p>
+                    <p th:unless="${busqueda != null || categoriaSeleccionada != null}">
+                        Próximamente tendremos productos sublimados disponibles
+                    </p>
+                    <a th:href="@{/productos}" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-redo"></i> Ver todos los productos
+                    </a>
+                </div>
+            </section>
+
+            <!-- Categorías destacadas -->
+            <section class="categories-section" style="margin-top: 4rem;">
+                <h2 class="section-title">Explora por Categoría</h2>
+                <div class="categories-grid">
+                    <a th:each="categoria : ${categorias}" 
+                       th:href="@{/productos(categoriaId=${categoria.id})}"
+                       class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <h3 th:text="${categoria.nombre}">Categoría</h3>
+                        <p th:text="${categoria.descripcion}">Descripción de la categoría</p>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

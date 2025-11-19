@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Sakari</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a th:href="@{/}">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-text" style="display:none;">SAKARI</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a th:href="@{/inicio}">Inicio</a></li>
+                <li><a th:href="@{/productos}">Productos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <i class="fas fa-user-plus"></i>
+                    <h2>Crear Cuenta</h2>
+                </div>
+
+                <div th:if="${error}" class="alert alert-error">
+                    <span th:text="${error}"></span>
+                </div>
+
+                <form th:action="@{/registro}" th:object="${usuario}" method="post" class="auth-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre">
+                                <i class="fas fa-user"></i> Nombre
+                            </label>
+                            <input type="text" id="nombre" th:field="*{nombre}" required 
+                                   placeholder="Tu nombre">
+                            <span class="error" th:if="${#fields.hasErrors('nombre')}" 
+                                  th:errors="*{nombre}"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="apellido">
+                                <i class="fas fa-user"></i> Apellido
+                            </label>
+                            <input type="text" id="apellido" th:field="*{apellido}" required 
+                                   placeholder="Tu apellido">
+                            <span class="error" th:if="${#fields.hasErrors('apellido')}" 
+                                  th:errors="*{apellido}"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        <input type="email" id="email" th:field="*{email}" required 
+                               placeholder="tu@email.com">
+                        <span class="error" th:if="${#fields.hasErrors('email')}" 
+                              th:errors="*{email}"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">
+                            <i class="fas fa-phone"></i> Teléfono
+                        </label>
+                        <input type="tel" id="telefono" th:field="*{telefono}" 
+                               placeholder="1234-5678">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="direccion">
+                            <i class="fas fa-map-marker-alt"></i> Dirección
+                        </label>
+                        <textarea id="direccion" th:field="*{direccion}" rows="3" 
+                                  placeholder="Tu dirección completa"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i> Contraseña
+                        </label>
+                        <input type="password" id="password" th:field="*{password}" required 
+                               placeholder="Mínimo 6 caracteres" minlength="6">
+                        <span class="error" th:if="${#fields.hasErrors('password')}" 
+                              th:errors="*{password}"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-user-plus"></i> Registrarse
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>¿Ya tienes una cuenta? <a th:href="@{/login}">Inicia sesión aquí</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Sakari. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>

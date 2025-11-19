@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones - Sakari</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a th:href="@{/}">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-text" style="display:none;">SAKARI</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a th:href="@{/inicio}">Inicio</a></li>
+                <li><a th:href="@{/productos}">Productos</a></li>
+                <li><a th:href="@{/contacto}">Contáctenos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Términos y Condiciones</h1>
+                <p>Última actualización: Noviembre 2024</p>
+            </div>
+
+            <div class="about-section">
+                <div class="about-content">
+                    <h2>1. Aceptación de los Términos</h2>
+                    <p>
+                        Al acceder y utilizar el sitio web de Sakari, usted acepta cumplir con estos términos y condiciones.
+                        Si no está de acuerdo con alguna parte de estos términos, no debe utilizar nuestro sitio web.
+                    </p>
+
+                    <h2>2. Uso del Sitio Web</h2>
+                    <p>
+                        El contenido de este sitio web es únicamente para su información general y uso. Está sujeto a
+                        cambios sin previo aviso. Usted se compromete a:
+                    </p>
+                    <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                        <li>No usar el sitio para propósitos ilegales</li>
+                        <li>No intentar interferir con el funcionamiento del sitio</li>
+                        <li>No reproducir, duplicar o copiar el contenido sin autorización</li>
+                        <li>Proporcionar información veraz y actualizada</li>
+                    </ul>
+
+                    <h2>3. Registro de Cuenta</h2>
+                    <p>
+                        Para realizar compras, debe crear una cuenta. Usted es responsable de:
+                    </p>
+                    <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                        <li>Mantener la confidencialidad de su contraseña</li>
+                        <li>Todas las actividades realizadas con su cuenta</li>
+                        <li>Notificarnos inmediatamente sobre uso no autorizado</li>
+                    </ul>
+
+                    <h2>4. Productos y Precios</h2>
+                    <p>
+                        Nos esforzamos por mostrar con precisión los colores y las imágenes de nuestros productos.
+                        Sin embargo, no podemos garantizar que la visualización en su monitor sea exacta. Todos los
+                        precios están sujetos a cambios sin previo aviso. Nos reservamos el derecho de:
+                    </p>
+                    <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                        <li>Modificar o discontinuar productos</li>
+                        <li>Limitar cantidades de compra</li>
+                        <li>Rechazar pedidos a nuestra discreción</li>
+                    </ul>
+
+                    <h2>5. Proceso de Pedidos</h2>
+                    <p>
+                        Al realizar un pedido, usted hace una oferta de compra. Nos reservamos el derecho de aceptar
+                        o rechazar su pedido. La confirmación del pedido se enviará por email. El contrato se forma
+                        cuando enviamos la confirmación de envío.
+                    </p>
+
+                    <h2>6. Pagos</h2>
+                    <p>
+                        Aceptamos diversos métodos de pago. Todos los pagos deben realizarse en colones costarricenses (₡).
+                        Su información de pago se procesa de forma segura. No almacenamos datos de tarjetas de crédito.
+                    </p>
+
+                    <h2>7. Envíos y Entregas</h2>
+                    <p>
+                        Los tiempos de entrega estimados son aproximados y pueden variar. No nos hacemos responsables
+                        por retrasos causados por circunstancias fuera de nuestro control. Los riesgos de pérdida
+                        o daño pasan al comprador en el momento de la entrega al transportista.
+                    </p>
+
+                    <h2>8. Devoluciones y Reembolsos</h2>
+                    <p>
+                        Productos personalizados: No se aceptan devoluciones de productos personalizados excepto
+                        por defectos de fabricación.
+                    </p>
+                    <p>
+                        Productos estándar: Aceptamos devoluciones dentro de los 14 días posteriores a la recepción,
+                        siempre que el producto esté en su estado original.
+                    </p>
+
+                    <h2>9. Propiedad Intelectual</h2>
+                    <p>
+                        Todo el contenido del sitio web, incluyendo texto, gráficos, logos, imágenes y software,
+                        es propiedad de Sakari o sus proveedores de contenido y está protegido por leyes de derechos
+                        de autor y propiedad intelectual.
+                    </p>
+
+                    <h2>10. Personalización de Productos</h2>
+                    <p>
+                        Al solicitar personalizaciones, usted garantiza que:
+                    </p>
+                    <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                        <li>Tiene los derechos necesarios sobre los diseños proporcionados</li>
+                        <li>Los diseños no infringen derechos de terceros</li>
+                        <li>El contenido no es ilegal, ofensivo o difamatorio</li>
+                    </ul>
+
+                    <h2>11. Limitación de Responsabilidad</h2>
+                    <p>
+                        Sakari no será responsable por daños indirectos, incidentales, especiales o consecuentes
+                        que resulten del uso o la imposibilidad de uso de nuestros productos o servicios.
+                    </p>
+
+                    <h2>12. Ley Aplicable</h2>
+                    <p>
+                        Estos términos se rigen por las leyes de Costa Rica. Cualquier disputa será resuelta en
+                        los tribunales de San José, Costa Rica.
+                    </p>
+
+                    <h2>13. Modificaciones</h2>
+                    <p>
+                        Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios
+                        entrarán en vigor inmediatamente después de su publicación en el sitio web.
+                    </p>
+
+                    <h2>14. Contacto</h2>
+                    <p>
+                        Para preguntas sobre estos términos y condiciones, contáctenos en:
+                    </p>
+                    <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                        <li>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bcd5d2dad3fccfddd7ddced592dfd3d1">[email&#160;protected]</a></li>
+                        <li>Teléfono: +506 1234-5678</li>
+                        <li>Dirección: San José, Costa Rica</li>
+                    </ul>
+
+                    <p style="margin-top: 2rem; font-style: italic;">
+                        Al utilizar este sitio web, usted reconoce haber leído y aceptado estos términos y condiciones.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="footer-logo"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <h3 class="footer-logo-text" style="display:none;">SAKARI</h3>
+                    <p class="footer-description">Productos únicos y personalizados para ti</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-phone"></i> <a href="tel:+50612345678">+506 1234-5678</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#f0999e969fb083919b918299de939f9d"><span class="__cf_email__" data-cfemail="87eee9e1e8c7f4e6ece6f5eea9e4e8ea">[email&#160;protected]</span></a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> La Aurora,Heredia, Costa Rica</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Información</h4>
+                    <ul class="footer-links">
+                        <li><a th:href="@{/quienes-somos}">Quiénes Somos</a></li>
+                        <li><a th:href="@{/politicas-privacidad}">Políticas de Privacidad</a></li>
+                        <li><a th:href="@{/terminos-condiciones}">Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
