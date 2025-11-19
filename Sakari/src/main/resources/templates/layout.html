@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo != null ? titulo + ' - Sakari' : 'Sakari'}">Sakari</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Barra de Navegación -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a th:href="@{/}">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-text" style="display:none;">SAKARI</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a th:href="@{/inicio}" th:classappend="${#httpServletRequest.requestURI == '/' || #httpServletRequest.requestURI == '/inicio' ? 'active' : ''}">Inicio</a></li>
+                <li><a th:href="@{/productos}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/productos') ? 'active' : ''}">Productos</a></li>
+                <li><a th:href="@{/personalizaciones}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/personalizaciones') ? 'active' : ''}">Personalizaciones</a></li>
+                <li><a th:href="@{/quienes-somos}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/quienes-somos') ? 'active' : ''}">¿Quiénes Somos?</a></li>
+                <li><a th:href="@{/contacto}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/contacto') ? 'active' : ''}">Contáctenos</a></li>
+                <li><a th:href="@{/login}" class="btn-login"><i class="fas fa-user"></i> Iniciar Sesión</a></li>
+                <li><a th:href="@{/carrito}" class="btn-cart"><i class="fas fa-shopping-cart"></i> Carrito</a></li>
+            </ul>
+            
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <div th:if="${mensaje}" class="alert alert-success">
+            <span th:text="${mensaje}"></span>
+        </div>
+        <div th:if="${error}" class="alert alert-error">
+            <span th:text="${error}"></span>
+        </div>
+        
+        <div th:replace="${content}">
+            <!-- El contenido específico de cada página se insertará aquí -->
+        </div>
+    </main>
+
+    <!-- Pie de Página -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="footer-logo"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <h3 class="footer-logo-text" style="display:none;">SAKARI</h3>
+                    <p class="footer-description">Productos únicos y personalizados para ti</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-phone"></i> <a href="tel:+50612345678">+506 1234-5678</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#9ef7f0f8f1deedfff5ffecf7b0fdf1f3"><span class="__cf_email__" data-cfemail="4d24232b220d3e2c262c3f24632e2220">[email&#160;protected]</span></a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> San José, Costa Rica</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Información</h4>
+                    <ul class="footer-links">
+                        <li><a th:href="@{/quienes-somos}">Quiénes Somos</a></li>
+                        <li><a th:href="@{/politicas-privacidad}">Políticas de Privacidad</a></li>
+                        <li><a th:href="@{/terminos-condiciones}">Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2024</span> Sakari. Todos los derechos re
