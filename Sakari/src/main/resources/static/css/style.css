@@ -118,8 +118,8 @@ img {
 }
 
 .btn-login {
-    background-color: var(--primary-color);
-    color: var(--white);
+    background-color: #00d4ff; /* azul claro */
+    color: #1a1a1a; /* texto negro oscuro */
 }
 
 .btn-login:hover {
