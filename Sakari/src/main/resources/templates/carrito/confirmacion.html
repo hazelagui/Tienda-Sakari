@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/head :: head('Pedido Confirmado')}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="main-content py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card text-center">
+                        <div class="card-body py-5">
+                            <div class="mb-4">
+                                <div style="width: 100px; height: 100px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                    <i class="fas fa-check text-white" style="font-size: 3rem;"></i>
+                                </div>
+                            </div>
+                            
+                            <h2 class="text-gradient mb-3">¡Pedido Confirmado!</h2>
+                            
+                            <p class="text-muted mb-4" th:if="${mensaje}" th:text="${mensaje}">
+                                Tu pedido ha sido recibido exitosamente.
+                            </p>
+                            <p class="text-muted mb-4" th:unless="${mensaje}">
+                                Tu pedido ha sido recibido exitosamente. Te contactaremos pronto para coordinar el pago y envío.
+                            </p>
+
+                            <div th:if="${pedidoTotal}" class="alert alert-info mb-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Total del pedido:</span>
+                                    <strong class="fs-5" th:text="${#numbers.formatDecimal(pedidoTotal, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</strong>
+                                </div>
+                                <div th:if="${metodoPago}" class="mt-2 pt-2 border-top">
+                                    <small>Método de pago: <strong th:text="${metodoPago}">SINPE</strong></small>
+                                </div>
+                            </div>
+
+                            <div class="bg-light rounded p-3 mb-4">
+                                <h6 class="mb-2"><i class="fas fa-info-circle me-2 text-primary"></i>¿Qué sigue?</h6>
+                                <ol class="text-start small text-muted mb-0">
+                                    <li class="mb-1">Recibirás un mensaje de WhatsApp o llamada para confirmar tu pedido</li>
+                                    <li class="mb-1">Te enviaremos los datos para realizar el pago</li>
+                                    <li class="mb-1">Una vez confirmado el pago, procesaremos tu pedido</li>
+                                    <li>Te notificaremos cuando tu pedido esté en camino</li>
+                                </ol>
+                            </div>
+
+                            <div class="d-flex gap-2 justify-content-center flex-wrap">
+                                <a th:href="@{/productos}" class="btn btn-primary">
+                                    <i class="fas fa-shopping-bag me-2"></i>Seguir Comprando
+                                </a>
+                                <a th:href="@{/perfil/pedidos}" class="btn btn-secondary">
+                                    <i class="fas fa-list me-2"></i>Ver Mis Pedidos
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

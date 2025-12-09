@@ -1,189 +1,134 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
-<head th:replace="~{fragments/head :: head('Detalle del Producto')}"></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/head :: head(${producto.nombre})}"></head>
 <body>
-    <!-- Navbar -->
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <main class="main-content">
+    <main class="main-content py-4">
         <div class="container">
             <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb" style="margin-bottom: 2rem;">
-                <ol style="list-style: none; display: flex; gap: 0.5rem; padding: 0;">
-                    <li><a th:href="@{/}">Inicio</a></li>
-                    <li>/</li>
-                    <li><a th:href="@{/productos}">Productos</a></li>
-                    <li>/</li>
-                    <li th:text="${producto.nombre}">Producto</li>
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/productos}">Productos</a></li>
+                    <li class="breadcrumb-item active" th:text="${producto.nombre}">Producto</li>
                 </ol>
             </nav>
 
-            <!-- Mensajes -->
-            <div th:if="${mensaje}" class="alert alert-success">
-                <span th:text="${mensaje}"></span>
-            </div>
-
-            <div th:if="${error}" class="alert alert-error">
-                <span th:text="${error}"></span>
-            </div>
-
-            <!-- Detalle del Producto -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
-                <!-- Imagen del Producto -->
-                <div>
-                    <div style="background-color: var(--white); padding: 2rem; border-radius: 10px; box-shadow: var(--shadow);">
-                        <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/img/placeholder.jpg'}" 
-                             th:alt="${producto.nombre}"
-                             style="width: 100%; max-height: 500px; object-fit: contain;"
-                             onerror="this.src='https://via.placeholder.com/500x500/8b5e9f/ffffff?text=Producto+Sublimado'">
-                        
-                        <div th:if="${producto.personalizable}" style="margin-top: 1rem; text-align: center;">
-                            <span class="badge-personalizable" style="position: static; padding: 0.5rem 1.5rem; font-size: 1rem;">
-                                <i class="fas fa-paint-brush"></i> Producto Personalizable
-                            </span>
+            <div class="row g-4">
+                <!-- Imagen -->
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}" 
+                                 class="img-fluid w-100" style="border-radius: var(--radius-lg); aspect-ratio: 1; object-fit: cover;"
+                                 onerror="this.src='https://via.placeholder.com/600x600?text=Sakari'">
                         </div>
                     </div>
                 </div>
 
-                <!-- Información del Producto -->
-                <div>
-                    <div style="background-color: var(--white); padding: 2rem; border-radius: 10px; box-shadow: var(--shadow);">
-                        <h1 th:text="${producto.nombre}" style="color: var(--primary-color); margin-bottom: 1rem;">Nombre del Producto</h1>
-                        
-                        <!-- Categoría -->
-                        <div th:if="${producto.categoria != null}" style="margin-bottom: 1rem;">
-                            <span style="background-color: var(--bg-color); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
-                                <i class="fas fa-tag"></i>
-                                <span th:text="${producto.categoria.nombre}">Categoría</span>
-                            </span>
-                        </div>
-
-                        <!-- Precio -->
-                        <div style="margin: 2rem 0;">
-                            <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">Precio:</p>
-                            <p style="font-size: 2.5rem; font-weight: bold; color: var(--secondary-color);" 
-                               th:text="'₡' + ${#numbers.formatDecimal(producto.precio, 0, 2)}">₡0.00</p>
-                        </div>
-
-                        <!-- Disponibilidad -->
-                        <div style="margin-bottom: 2rem;">
-                            <p th:if="${producto.tieneStock()}" style="color: var(--success-color); font-weight: 500;">
-                                <i class="fas fa-check-circle"></i> 
-                                En stock (<span th:text="${producto.stock}">0</span> disponibles)
-                            </p>
-                            <p th:unless="${producto.tieneStock()}" style="color: var(--accent-color); font-weight: 500;">
-                                <i class="fas fa-times-circle"></i> Producto agotado
-                            </p>
-                        </div>
-
-                        <!-- Descripción -->
-                        <div style="margin-bottom: 2rem;">
-                            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Descripción</h3>
-                            <p th:text="${producto.descripcion}" style="line-height: 1.8; color: var(--text-color);">
-                                Descripción del producto
-                            </p>
-                        </div>
-
-                        <!-- Formulario de compra -->
-                        <form th:action="@{/carrito/agregar}" method="post" th:if="${producto.tieneStock()}" 
-                              sec:authorize="isAuthenticated()">
-                            <input type="hidden" name="productoId" th:value="${producto.id}">
+                <!-- Info -->
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2" th:text="${producto.categoria?.nombre ?: 'General'}">Categoría</span>
                             
-                            <!-- Cantidad -->
-                            <div class="form-group" style="margin-bottom: 1.5rem;">
-                                <label for="cantidad" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
-                                    <i class="fas fa-sort-numeric-up"></i> Cantidad:
-                                </label>
-                                <input type="number" id="cantidad" name="cantidad" value="1" 
-                                       min="1" th:max="${producto.stock}" 
-                                       class="quantity-input" 
-                                       style="width: 100px; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 5px;">
+                            <h1 class="h2 mb-3" th:text="${producto.nombre}">Producto</h1>
+                            
+                            <p class="text-muted mb-4" th:text="${producto.descripcion}">Descripción del producto</p>
+
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <span class="fs-2 fw-bold text-primary" th:text="${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</span>
+                                <span th:if="${producto.stock > 0}" class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>En Stock
+                                </span>
+                                <span th:unless="${producto.stock > 0}" class="badge bg-danger">
+                                    <i class="fas fa-times me-1"></i>Agotado
+                                </span>
                             </div>
 
-                            <!-- Personalización -->
-                            <div th:if="${producto.personalizable}" class="form-group" style="margin-bottom: 1.5rem;">
-                                <label for="personalizacion" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
-                                    <i class="fas fa-paint-brush"></i> Personalización (opcional):
-                                </label>
-                                <textarea id="personalizacion" name="personalizacion" 
-                                          rows="3" 
-                                          placeholder="Describe cómo deseas personalizar tu producto..."
-                                          style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 5px; font-family: inherit;"></textarea>
-                                <small style="color: var(--text-light); font-size: 0.85rem;">
-                                    Ejemplo: "Quiero mi nombre en color azul", "Logo de mi empresa", etc.
-                                </small>
+                            <div th:if="${producto.personalizable}" class="alert alert-info mb-4">
+                                <i class="fas fa-magic me-2"></i>
+                                <strong>Producto Personalizable</strong>
+                                <p class="mb-0 mt-1 small">Puedes agregar tu diseño, texto o imagen personalizada.</p>
                             </div>
 
-                            <!-- Botones de acción -->
-                            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                                <button type="submit" class="btn btn-primary" style="flex: 1;">
-                                    <i class="fas fa-cart-plus"></i> Agregar al Carrito
-                                </button>
-                                <a th:href="@{/productos}" class="btn btn-secondary">
-                                    <i class="fas fa-arrow-left"></i> Volver
-                                </a>
-                            </div>
-                        </form>
+                            <form th:action="@{/carrito/agregar}" method="post" id="addToCartForm">
+                                <input type="hidden" name="productoId" th:value="${producto.id}">
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Cantidad</label>
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="cambiarCantidad(-1)">−</button>
+                                            <input type="number" name="cantidad" id="cantidad" class="form-control text-center" 
+                                                   value="1" min="1" th:max="${producto.stock}">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="cambiarCantidad(1)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <!-- Mensaje si no está autenticado -->
-                        <div sec:authorize="!isAuthenticated()" style="text-align: center; padding: 2rem; background-color: var(--bg-color); border-radius: 10px;">
-                            <i class="fas fa-lock" style="font-size: 3rem; color: var(--text-light); margin-bottom: 1rem;"></i>
-                            <p style="margin-bottom: 1rem; color: var(--text-color);">Debes iniciar sesión para agregar productos al carrito</p>
-                            <a th:href="@{/login}" class="btn btn-primary">
-                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
-                            </a>
+                                <div th:if="${producto.personalizable}" class="mb-4">
+                                    <label for="personalizacion" class="form-label">Personalización</label>
+                                    <textarea name="personalizacion" id="personalizacion" class="form-control" rows="2"
+                                              placeholder="Describe tu personalización (texto, colores, etc.)"></textarea>
+                                </div>
+
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <button type="submit" class="btn btn-primary btn-lg" th:disabled="${producto.stock <= 0}">
+                                        <i class="fas fa-cart-plus me-2"></i>Agregar al Carrito
+                                    </button>
+                                    <a th:href="@{/productos}" class="btn btn-secondary btn-lg">
+                                        <i class="fas fa-arrow-left me-2"></i>Volver
+                                    </a>
+                                </div>
+                            </form>
+
+                            <!-- Características -->
+                            <hr class="my-4">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-truck text-primary"></i>
+                                        <small>Envío a todo CR</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-shield-alt text-success"></i>
+                                        <small>Garantía de calidad</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-headset text-info"></i>
+                                        <small>Soporte WhatsApp</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-award text-warning"></i>
+                                        <small>Alta calidad</small>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <!-- Mensaje si está agotado -->
-                        <div th:unless="${producto.tieneStock()}" style="text-align: center; padding: 2rem; background-color: var(--bg-color); border-radius: 10px;">
-                            <i class="fas fa-box-open" style="font-size: 3rem; color: var(--text-light); margin-bottom: 1rem;"></i>
-                            <p style="margin-bottom: 1rem; color: var(--text-color);">Este producto está actualmente agotado</p>
-                            <a th:href="@{/contacto}" class="btn btn-secondary">
-                                <i class="fas fa-envelope"></i> Notificarme cuando esté disponible
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Características del producto -->
-                    <div style="background-color: var(--white); padding: 2rem; border-radius: 10px; box-shadow: var(--shadow); margin-top: 2rem;">
-                        <h3 style="color: var(--primary-color); margin-bottom: 1.5rem;">Características</h3>
-                        <ul style="list-style: none; padding: 0;">
-                            <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem;">
-                                <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
-                                <span>Impresión de alta calidad por sublimación</span>
-                            </li>
-                            <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem;">
-                                <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
-                                <span>Colores vibrantes y duraderos</span>
-                            </li>
-                            <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem;">
-                                <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
-                                <span>Resistente a lavados frecuentes</span>
-                            </li>
-                            <li style="padding: 0.75rem 0; display: flex; align-items: center; gap: 1rem;">
-                                <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
-                                <span>Materiales de primera calidad</span>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
-
-            <!-- Productos relacionados -->
-            <section style="margin-top: 4rem;">
-                <h2 class="section-title">Productos Relacionados</h2>
-                <div class="products-grid">
-                    <!-- Aquí podrías agregar productos relacionados dinámicamente -->
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-light);">
-                        <p>Explora más productos en nuestra <a th:href="@{/productos}" style="color: var(--secondary-color);">tienda</a></p>
-                    </div>
-                </div>
-            </section>
         </div>
     </main>
 
-    <!-- Footer -->
     <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script>
+        function cambiarCantidad(delta) {
+            const input = document.getElementById('cantidad');
+            let valor = parseInt(input.value) + delta;
+            if (valor < 1) valor = 1;
+            if (valor > parseInt(input.max)) valor = parseInt(input.max);
+            input.value = valor;
+        }
+    </script>
 </body>
 </html>

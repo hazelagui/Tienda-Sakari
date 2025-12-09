@@ -1,180 +1,138 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head th:replace="~{fragments/head :: head('Productos')}"></head>
 <body>
-    <!-- Navbar -->
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <main class="main-content">
+    <section class="page-header">
         <div class="container">
-            <div class="page-header">
-                <h1><i class="fas fa-shopping-bag"></i> Nuestros Productos</h1>
-                <p>Productos sublimados de alta calidad</p>
-            </div>
+            <h1><i class="fas fa-shopping-bag me-2"></i>Nuestros Productos</h1>
+            <p>Encuentra productos únicos de alta calidad</p>
+        </div>
+    </section>
 
-            <!-- Mensajes -->
-            <div th:if="${mensaje}" class="alert alert-success">
-                <span th:text="${mensaje}"></span>
-            </div>
-
-            <div th:if="${error}" class="alert alert-error">
-                <span th:text="${error}"></span>
-            </div>
-
-            <!-- Filtros y búsqueda -->
-            <section class="filters-section">
-                <form th:action="@{/productos}" method="get" class="filters-form">
-                    <div class="filter-group">
-                        <label for="categoriaId">
-                            <i class="fas fa-tag"></i> Categoría
-                        </label>
-                        <select id="categoriaId" name="categoriaId" onchange="this.form.submit()">
-                            <option value="">Todas las categorías</option>
-                            <option th:each="categoria : ${categorias}" 
-                                    th:value="${categoria.id}" 
-                                    th:text="${categoria.nombre}"
-                                    th:selected="${categoriaSeleccionada != null && categoriaSeleccionada.id == categoria.id}">
-                                Categoría
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label for="busqueda">
-                            <i class="fas fa-search"></i> Buscar producto
-                        </label>
-                        <input type="text" id="busqueda" name="busqueda" 
-                               th:value="${busqueda}"
-                               placeholder="Buscar por nombre o descripción...">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search"></i> Buscar
-                    </button>
-
-                    <a th:href="@{/productos}" class="btn btn-secondary">
-                        <i class="fas fa-redo"></i> Limpiar
-                    </a>
-                </form>
-            </section>
-
-            <!-- Información de filtros aplicados -->
-            <div th:if="${categoriaSeleccionada != null}" style="margin: 1rem 0; padding: 1rem; background-color: var(--bg-color); border-radius: 5px;">
-                <p style="margin: 0;">
-                    Mostrando productos de: <strong th:text="${categoriaSeleccionada.nombre}">Categoría</strong>
-                    <a th:href="@{/productos}" style="margin-left: 1rem; color: var(--secondary-color);">
-                        <i class="fas fa-times"></i> Quitar filtro
-                    </a>
-                </p>
-            </div>
-
-            <div th:if="${busqueda != null && !busqueda.isEmpty()}" style="margin: 1rem 0; padding: 1rem; background-color: var(--bg-color); border-radius: 5px;">
-                <p style="margin: 0;">
-                    Resultados de búsqueda para: <strong th:text="${busqueda}">término</strong>
-                    <a th:href="@{/productos}" style="margin-left: 1rem; color: var(--secondary-color);">
-                        <i class="fas fa-times"></i> Quitar búsqueda
-                    </a>
-                </p>
-            </div>
-
-            <!-- Grid de productos -->
-            <section class="products-section">
-                <div class="products-grid" th:if="${productos != null && !productos.isEmpty()}">
-                    <div class="product-card" th:each="producto : ${productos}">
-                        <div class="product-image">
-                            <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/images/placeholder.jpg'}" 
-                                 th:alt="${producto.nombre}"
-                                 onerror="this.src='https://via.placeholder.com/300x300/8b5e9f/ffffff?text=Producto+Sublimado'">
-                            <span class="badge-personalizable" th:if="${producto.personalizable}">
-                                <i class="fas fa-paint-brush"></i> Personalizable
-                            </span>
-                            <span class="badge-agotado" th:unless="${producto.tieneStock()}">
-                                Agotado
-                            </span>
+    <main class="main-content py-4">
+        <div class="container">
+            <!-- Filtros -->
+            <div class="card mb-4">
+                <div class="card-body py-3">
+                    <form th:action="@{/productos}" method="get" class="row g-2 align-items-end">
+                        <div class="col-md-4">
+                            <label for="categoria" class="form-label small">Categoría</label>
+                            <select name="categoria" id="categoria" class="form-select form-select-sm">
+                                <option value="">Todas las categorías</option>
+                                <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"
+                                        th:selected="${categoriaId != null and categoriaId == cat.id}">Categoría</option>
+                            </select>
                         </div>
-                        <div class="product-info">
-                            <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
-                            <p class="product-description" th:text="${producto.descripcion}">
-                                Descripción del producto sublimado
-                            </p>
-                            <p class="product-stock" th:if="${producto.tieneStock()}">
-                                <i class="fas fa-check-circle"></i> 
-                                En stock: <span th:text="${producto.stock}">0</span>
-                            </p>
-                            <p class="product-stock" th:unless="${producto.tieneStock()}" style="color: var(--accent-color);">
-                                <i class="fas fa-times-circle"></i> Sin stock
-                            </p>
-                            <div class="product-footer">
-                                <span class="price" th:text="'₡' + ${#numbers.formatDecimal(producto.precio, 0, 2)}">₡0.00</span>
-                                <div class="product-actions">
-                                    <a th:href="@{/productos/{id}(id=${producto.id})}" 
-                                       class="btn btn-sm btn-secondary"
-                                       title="Ver detalles">
-                                        <i class="fas fa-eye"></i> Ver
-                                    </a>
-                                    <form th:action="@{/carrito/agregar}" method="post" 
-                                          style="display: inline;"
-                                          sec:authorize="isAuthenticated()">
-                                        <input type="hidden" name="productoId" th:value="${producto.id}">
-                                        <input type="hidden" name="cantidad" value="1">
-                                        <button type="submit" 
-                                                class="btn btn-sm btn-primary" 
-                                                th:disabled="${!producto.tieneStock()}"
-                                                title="Agregar al carrito">
-                                            <i class="fas fa-cart-plus"></i>
-                                        </button>
-                                    </form>
-                                    <a th:href="@{/login}" 
-                                       class="btn btn-sm btn-primary"
-                                       sec:authorize="!isAuthenticated()"
-                                       title="Iniciar sesión para comprar">
-                                        <i class="fas fa-cart-plus"></i>
-                                    </a>
-                                </div>
-                            </div>
+                        <div class="col-md-4">
+                            <label for="buscar" class="form-label small">Buscar</label>
+                            <input type="text" name="buscar" id="buscar" class="form-control form-control-sm" 
+                                   placeholder="Nombre del producto..." th:value="${buscar}">
                         </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                <i class="fas fa-search me-1"></i>Filtrar
+                            </button>
+                        </div>
+                        <div class="col-md-2">
+                            <a th:href="@{/productos}" class="btn btn-secondary btn-sm w-100">
+                                <i class="fas fa-times me-1"></i>Limpiar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Productos -->
+            <div th:if="${productos != null and !productos.isEmpty()}" class="products-grid">
+                <div th:each="producto : ${productos}" class="product-card">
+                    <div class="product-image">
+                        <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}" 
+                             onerror="this.src='https://via.placeholder.com/400x400?text=Sakari'">
+                        <span th:if="${producto.personalizable}" class="product-badge">
+                            <i class="fas fa-magic me-1"></i>Personalizable
+                        </span>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category" th:text="${producto.categoria?.nombre ?: 'General'}">Categoría</span>
+                        <h3 class="product-title" th:text="${producto.nombre}">Producto</h3>
+                        <p class="product-price" th:text="${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</p>
+                    </div>
+                    <div class="product-actions">
+                        <a th:href="@{/productos/{id}(id=${producto.id})}" class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
+                        <button class="btn btn-primary btn-agregar" th:data-id="${producto.id}">
+                            <i class="fas fa-cart-plus"></i> Añadir
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Sin resultados -->
-                <div th:if="${productos == null || productos.isEmpty()}" class="no-products">
-                    <i class="fas fa-box-open"></i>
-                    <h2>No se encontraron productos</h2>
-                    <p th:if="${busqueda != null && !busqueda.isEmpty()}">
-                        No hay productos que coincidan con "<span th:text="${busqueda}"></span>"
-                    </p>
-                    <p th:if="${categoriaSeleccionada != null}">
-                        No hay productos en la categoría "<span th:text="${categoriaSeleccionada.nombre}"></span>"
-                    </p>
-                    <p th:unless="${busqueda != null || categoriaSeleccionada != null}">
-                        Próximamente tendremos productos sublimados disponibles
-                    </p>
-                    <a th:href="@{/productos}" class="btn btn-primary" style="margin-top: 1rem;">
-                        <i class="fas fa-redo"></i> Ver todos los productos
-                    </a>
-                </div>
-            </section>
-
-            <!-- Categorías destacadas -->
-            <section class="categories-section" style="margin-top: 4rem;">
-                <h2 class="section-title">Explora por Categoría</h2>
-                <div class="categories-grid">
-                    <a th:each="categoria : ${categorias}" 
-                       th:href="@{/productos(categoriaId=${categoria.id})}"
-                       class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-tag"></i>
-                        </div>
-                        <h3 th:text="${categoria.nombre}">Categoría</h3>
-                        <p th:text="${categoria.descripcion}">Descripción de la categoría</p>
-                    </a>
-                </div>
-            </section>
+            <!-- Sin productos -->
+            <div th:if="${productos == null or productos.isEmpty()}" class="empty-state">
+                <i class="fas fa-search"></i>
+                <h2>No se encontraron productos</h2>
+                <p>Intenta con otros filtros o categorías</p>
+                <a th:href="@{/productos}" class="btn btn-primary">Ver Todos</a>
+            </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script>
+        document.querySelectorAll('.btn-agregar').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productoId = this.dataset.id;
+                const button = this;
+                
+                fetch('/carrito/agregar/' + productoId, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                })
+                .then(response => {
+                    if (response.redirected && response.url.includes('login')) {
+                        window.location.href = response.url;
+                    } else {
+                        // Actualizar badge
+                        fetch('/carrito/count')
+                            .then(r => r.json())
+                            .then(count => {
+                                const badge = document.getElementById('cartCount');
+                                if (badge) {
+                                    badge.textContent = count;
+                                    badge.style.display = 'flex';
+                                }
+                            });
+                        
+                        // Feedback visual
+                        button.innerHTML = '<i class="fas fa-check"></i> Añadido';
+                        button.classList.remove('btn-primary');
+                        button.classList.add('btn-success');
+                        
+                        setTimeout(() => {
+                            button.innerHTML = '<i class="fas fa-cart-plus"></i> Añadir';
+                            button.classList.remove('btn-success');
+                            button.classList.add('btn-primary');
+                        }, 2000);
+                    }
+                })
+                .catch(err => console.error('Error:', err));
+            });
+        });
+
+        // Cargar contador inicial
+        fetch('/carrito/count')
+            .then(r => r.json())
+            .then(count => {
+                const badge = document.getElementById('cartCount');
+                if (badge) {
+                    badge.textContent = count;
+                    badge.style.display = count > 0 ? 'flex' : 'none';
+                }
+            });
+    </script>
 </body>
 </html>

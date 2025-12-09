@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/head :: head('Mis Pedidos')}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-shopping-bag"></i> Mis Pedidos</h1>
+                <a th:href="@{/perfil}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Perfil
+                </a>
+            </div>
+
+            <div th:if="${mensaje}" class="alert alert-success">
+                <span th:text="${mensaje}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error">
+                <span th:text="${error}"></span>
+            </div>
+
+            <div th:if="${pedidos != null && !pedidos.isEmpty()}">
+                <div th:each="pedido : ${pedidos}" class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <h3 th:text="${pedido.numeroPedido}">PED-XXX</h3>
+                            <p class="order-date">
+                                <i class="fas fa-calendar"></i>
+                                <span th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                            </p>
+                        </div>
+                        <span th:class="${'badge badge-' + pedido.estado.name().toLowerCase()}"
+                              th:text="${pedido.estado}"
+                              th:styleappend="${pedido.estado.name() == 'PENDIENTE' ? 'background: #f39c12; color: white;' : 
+                                               (pedido.estado.name() == 'PROCESANDO' ? 'background: #3498db; color: white;' :
+                                               (pedido.estado.name() == 'ENVIADO' ? 'background: #9b59b6; color: white;' :
+                                               (pedido.estado.name() == 'ENTREGADO' ? 'background: #27ae60; color: white;' :
+                                               'background: #e74c3c; color: white;')))}">
+                            Estado
+                        </span>
+                    </div>
+                    
+                    <div class="order-items">
+                        <div th:each="item : ${pedido.items}" class="order-item">
+                            <img th:src="${item.producto.imagenUrl != null ? item.producto.imagenUrl : '/img/placeholder.jpg'}"
+                                 th:alt="${item.producto.nombre}"
+                                 onerror="this.src='https://via.placeholder.com/60x60/8b5e9f/ffffff?text=IMG'">
+                            <div class="item-info">
+                                <p th:text="${item.producto.nombre}">Producto</p>
+                                <small>Cantidad: <span th:text="${item.cantidad}">1</span></small>
+                            </div>
+                            <p class="item-price" th:text="'₡' + ${#numbers.formatDecimal(item.subtotal, 0, 2)}">₡0.00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="order-footer">
+                        <div class="order-total">
+                            <span>Total:</span>
+                            <strong th:text="'₡' + ${#numbers.formatDecimal(pedido.total, 0, 2)}">₡0.00</strong>
+                        </div>
+                        <div class="order-actions">
+                            <a th:href="@{/pedidos/{id}(id=${pedido.id})}" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-eye"></i> Ver Detalle
+                            </a>
+                            <form th:if="${pedido.estado.name() == 'PENDIENTE' || pedido.estado.name() == 'PROCESANDO'}"
+                                  th:action="@{/pedidos/{id}/cancelar(id=${pedido.id})}" method="post" style="display: inline;"
+                                  onsubmit="return confirm('¿Estás seguro de cancelar este pedido?');">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${pedidos == null || pedidos.isEmpty()}" class="empty-state">
+                <i class="fas fa-shopping-bag"></i>
+                <h2>No tienes pedidos aún</h2>
+                <p>¡Explora nuestros productos y realiza tu primer pedido!</p>
+                <a th:href="@{/productos}" class="btn btn-primary">
+                    <i class="fas fa-shopping-cart"></i> Ver Productos
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <style>
+        .order-card { background: var(--white); border-radius: 10px; box-shadow: var(--shadow); margin-bottom: 1.5rem; overflow: hidden; }
+        .order-header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; background: var(--bg-color); }
+        .order-header h3 { margin: 0; color: var(--primary-color); }
+        .order-date { color: var(--text-light); margin-top: 0.3rem; font-size: 0.9rem; }
+        .order-items { padding: 1rem 1.5rem; }
+        .order-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
+        .order-item:last-child { border-bottom: none; }
+        .order-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; }
+        .item-info { flex: 1; }
+        .item-info p { margin: 0; font-weight: 500; }
+        .item-info small { color: var(--text-light); }
+        .item-price { font-weight: bold; color: var(--secondary-color); }
+        .order-footer { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-top: 2px solid var(--border-color); }
+        .order-total { font-size: 1.2rem; }
+        .order-total strong { color: var(--secondary-color); margin-left: 0.5rem; }
+        .order-actions { display: flex; gap: 0.5rem; }
+        .empty-state { text-align: center; padding: 4rem 2rem; }
+        .empty-state i { font-size: 4rem; color: var(--text-light); margin-bottom: 1rem; }
+        .empty-state h2 { color: var(--primary-color); }
+        .empty-state p { color: var(--text-light); margin-bottom: 1.5rem; }
+        .badge { padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; }
+    </style>
+</body>
+</html>

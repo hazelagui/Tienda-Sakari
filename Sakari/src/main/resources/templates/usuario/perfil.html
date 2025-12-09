@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head th:replace="~{fragments/head :: head('Mi Perfil')}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="main-content py-4">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-4 mb-4">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2 th:text="${usuario.nombreCompleto}">Usuario</h2>
+                        <p th:text="${usuario.email}">email@example.com</p>
+                    </div>
+                    <div class="profile-nav">
+                        <a th:href="@{/perfil}" class="nav-link active">
+                            <i class="fas fa-user"></i> Mi Perfil
+                        </a>
+                        <a th:href="@{/perfil/editar}" class="nav-link">
+                            <i class="fas fa-edit"></i> Editar Perfil
+                        </a>
+                        <a th:href="@{/perfil/cambiar-password}" class="nav-link">
+                            <i class="fas fa-lock"></i> Cambiar Contraseña
+                        </a>
+                        <a th:href="@{/perfil/pedidos}" class="nav-link">
+                            <i class="fas fa-shopping-bag"></i> Mis Pedidos
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contenido -->
+                <div class="col-lg-8">
+                    <div th:if="${mensaje}" class="alert alert-success mb-3">
+                        <i class="fas fa-check-circle me-2"></i><span th:text="${mensaje}"></span>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span><i class="fas fa-user me-2"></i>Información Personal</span>
+                            <a th:href="@{/perfil/editar}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-edit me-1"></i>Editar
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Nombre</label>
+                                    <p class="mb-0 fw-medium" th:text="${usuario.nombre}">Nombre</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Apellido</label>
+                                    <p class="mb-0 fw-medium" th:text="${usuario.apellido}">Apellido</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Email</label>
+                                    <p class="mb-0 fw-medium" th:text="${usuario.email}">email@example.com</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Teléfono</label>
+                                    <p class="mb-0 fw-medium" th:text="${usuario.telefono ?: 'No registrado'}">Teléfono</p>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label text-muted small">Dirección de Envío</label>
+                                    <p class="mb-0 fw-medium" th:text="${usuario.direccion ?: 'No registrada'}">Dirección</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-info-circle me-2"></i>Información de Cuenta
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Tipo de Cuenta</label>
+                                    <p class="mb-0">
+                                        <span th:if="${usuario.rol == 'ADMIN'}" class="badge bg-primary">
+                                            <i class="fas fa-crown me-1"></i>Administrador
+                                        </span>
+                                        <span th:unless="${usuario.rol == 'ADMIN'}" class="badge bg-success">
+                                            <i class="fas fa-user me-1"></i>Cliente
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Estado</label>
+                                    <p class="mb-0">
+                                        <span th:if="${usuario.activo}" class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Activo
+                                        </span>
+                                        <span th:unless="${usuario.activo}" class="badge bg-danger">
+                                            <i class="fas fa-times me-1"></i>Inactivo
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Miembro desde</label>
+                                    <p class="mb-0 fw-medium" th:text="${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy')}">Fecha</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Último acceso</label>
+                                    <p class="mb-0 fw-medium" th:text="${usuario.ultimoAcceso != null ? #temporals.format(usuario.ultimoAcceso, 'dd/MM/yyyy HH:mm') : 'Nunca'}">Fecha</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

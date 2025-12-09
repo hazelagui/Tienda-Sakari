@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle Pedido - Admin Sakari</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <th:block th:replace="~{admin/fragments/admin-layout :: styles}"></th:block>
+</head>
+<body>
+    <div class="admin-container">
+        <th:block th:replace="~{admin/fragments/admin-layout :: sidebar('pedidos')}"></th:block>
+        
+        <main class="admin-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h1 class="page-title" style="margin-bottom: 0;">
+                    <i class="fas fa-receipt"></i> Pedido <span th:text="${pedido.numeroPedido}">#</span>
+                </h1>
+                <a th:href="@{/admin/pedidos}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </div>
+
+            <div th:if="${mensaje}" class="alert alert-success">
+                <i class="fas fa-check-circle"></i> <span th:text="${mensaje}"></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                <!-- Info del pedido -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-info-circle"></i> Información del Pedido</h3>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Número de Pedido</label>
+                                <span th:text="${pedido.numeroPedido}">PED-XXX</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Fecha</label>
+                                <span th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Estado</label>
+                                <span th:class="'badge badge-' + ${pedido.estado.name().toLowerCase()}"
+                                      th:text="${pedido.estado}">Estado</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Total</label>
+                                <span style="font-size: 1.2rem; font-weight: 700; color: var(--primary);"
+                                      th:text="${#numbers.formatDecimal(pedido.total, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1.5rem;">
+                            <label class="form-label">Cambiar Estado</label>
+                            <form th:action="@{/admin/pedidos/{id}/estado(id=${pedido.id})}" method="post" 
+                                  style="display: flex; gap: 0.5rem;">
+                                <select name="estado" class="form-select" style="width: auto;">
+                                    <option value="PENDIENTE" th:selected="${pedido.estado.name() == 'PENDIENTE'}">Pendiente</option>
+                                    <option value="PROCESANDO" th:selected="${pedido.estado.name() == 'PROCESANDO'}">Procesando</option>
+                                    <option value="ENVIADO" th:selected="${pedido.estado.name() == 'ENVIADO'}">Enviado</option>
+                                    <option value="ENTREGADO" th:selected="${pedido.estado.name() == 'ENTREGADO'}">Entregado</option>
+                                    <option value="CANCELADO" th:selected="${pedido.estado.name() == 'CANCELADO'}">Cancelado</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm">Actualizar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cliente -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-user"></i> Cliente</h3>
+                    </div>
+                    <div class="admin-card-body">
+                        <p style="margin-bottom: 0.5rem;"><strong th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellido}">Cliente</strong></p>
+                        <p style="margin-bottom: 0.5rem; color: var(--gray-500);" th:text="${pedido.usuario.email}">email</p>
+                        <p th:if="${pedido.usuario.telefono}" style="margin-bottom: 0.5rem;" th:text="${pedido.usuario.telefono}">tel</p>
+                        <p th:if="${pedido.direccionEnvio}" style="margin-top: 1rem;">
+                            <strong>Dirección:</strong><br>
+                            <span th:text="${pedido.direccionEnvio}">Dirección</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items -->
+            <div class="admin-card" style="margin-top: 1.5rem;">
+                <div class="admin-card-header">
+                    <h3><i class="fas fa-list"></i> Productos</h3>
+                </div>
+                <div class="admin-card-body" style="padding: 0;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio Unit.</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${pedido.items}">
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <img th:src="${item.producto.imagenUrl}" class="product-img" 
+                                             onerror="this.src='https://via.placeholder.com/50'">
+                                        <span th:text="${item.producto.nombre}">Producto</span>
+                                    </div>
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(item.precioUnitario, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</td>
+                                <td th:text="${item.cantidad}">1</td>
+                                <td th:text="${#numbers.formatDecimal(item.subtotal, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" style="text-align: right; font-weight: 700;">Total:</td>
+                                <td style="font-weight: 700; color: var(--primary);" 
+                                    th:text="${#numbers.formatDecimal(pedido.total, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

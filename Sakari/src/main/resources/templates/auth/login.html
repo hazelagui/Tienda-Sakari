@@ -1,83 +1,87 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - Sakari</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+<head th:replace="~{fragments/head :: head('Iniciar Sesión')}"></head>
 <body>
-    <nav class="navbar">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="main-content py-5">
         <div class="container">
-            <div class="nav-brand">
-                <a th:href="@{/}">
-                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="logo-text" style="display:none;">SAKARI</span>
-                </a>
-            </div>
-            
-            <ul class="nav-menu">
-                <li><a th:href="@{/inicio}">Inicio</a></li>
-                <li><a th:href="@{/productos}">Productos</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <main class="main-content">
-        <div class="auth-container">
-            <div class="auth-card">
-                <div class="auth-header">
-                    <i class="fas fa-user-circle"></i>
-                    <h2>Iniciar Sesión</h2>
-                </div>
-
-                <div th:if="${mensaje}" class="alert alert-success">
-                    <span th:text="${mensaje}"></span>
-                </div>
-
-                <div th:if="${error}" class="alert alert-error">
-                    <span>Credenciales inválidas. Por favor intenta de nuevo.</span>
-                </div>
-
-                <form th:action="@{/login}" method="post" class="auth-form">
-                    <div class="form-group">
-                        <label for="username">
-                            <i class="fas fa-envelope"></i> Email
-                        </label>
-                        <input type="email" id="username" name="username" required 
-                               placeholder="tu@email.com">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-user-circle fa-4x" style="color: var(--primary-color);"></i>
+                                </div>
+                                <h2 class="fw-bold">Bienvenido</h2>
+                                <p class="text-muted">Inicia sesión en tu cuenta</p>
+                            </div>
+                            
+                            <div th:if="${param.error}" class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                Usuario o contraseña incorrectos
+                            </div>
+                            
+                            <div th:if="${param.logout}" class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Has cerrado sesión exitosamente
+                            </div>
+                            
+                            <div th:if="${mensaje}" class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <span th:text="${mensaje}"></span>
+                            </div>
+                            
+                            <form th:action="@{/login}" method="post">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label fw-semibold">
+                                        <i class="fas fa-envelope me-1"></i> Correo Electrónico
+                                    </label>
+                                    <input type="email" id="username" name="username" class="form-control form-control-lg" 
+                                           placeholder="tu@email.com" required autofocus>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="password" class="form-label fw-semibold">
+                                        <i class="fas fa-lock me-1"></i> Contraseña
+                                    </label>
+                                    <input type="password" id="password" name="password" class="form-control form-control-lg" 
+                                           placeholder="••••••••" required>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" id="remember" name="remember-me" class="form-check-input">
+                                        <label for="remember" class="form-check-label">Recordarme</label>
+                                    </div>
+                                    <a th:href="@{/recuperar-password}" class="text-decoration-none" style="color: var(--primary-color);">
+                                        ¿Olvidaste tu contraseña?
+                                    </a>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+                                </button>
+                            </form>
+                            
+                            <hr class="my-4">
+                            
+                            <div class="text-center">
+                                <p class="text-muted mb-0">
+                                    ¿No tienes cuenta? 
+                                    <a th:href="@{/registro}" class="fw-bold text-decoration-none" style="color: var(--primary-color);">
+                                        Regístrate aquí
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="password">
-                            <i class="fas fa-lock"></i> Contraseña
-                        </label>
-                        <input type="password" id="password" name="password" required 
-                               placeholder="Tu contraseña">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
-                    </button>
-                </form>
-
-                <div class="auth-footer">
-                    <p>¿No tienes una cuenta? <a th:href="@{/registro}">Regístrate aquí</a></p>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024 Sakari. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script th:src="@{/js/script.js}"></script>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

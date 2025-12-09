@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - Admin Sakari</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <th:block th:replace="~{admin/fragments/admin-layout :: styles}"></th:block>
+</head>
+<body>
+    <div class="admin-container">
+        <th:block th:replace="~{admin/fragments/admin-layout :: sidebar('productos')}"></th:block>
+        
+        <main class="admin-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h1 class="page-title" style="margin-bottom: 0;"><i class="fas fa-box"></i> Productos</h1>
+                <a th:href="@{/admin/productos/nuevo}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </a>
+            </div>
+
+            <div th:if="${mensaje}" class="alert alert-success">
+                <i class="fas fa-check-circle"></i> <span th:text="${mensaje}"></span>
+            </div>
+
+            <div class="admin-card">
+                <div class="admin-card-body" style="padding: 0;">
+                    <table class="admin-table" th:if="${productos != null && !productos.isEmpty()}">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="producto : ${productos}">
+                                <td>
+                                    <img th:src="${producto.imagenUrl}" class="product-img" 
+                                         onerror="this.src='https://via.placeholder.com/50'">
+                                </td>
+                                <td>
+                                    <strong th:text="${producto.nombre}">Producto</strong>
+                                    <span th:if="${producto.personalizable}" class="badge badge-info" style="margin-left: 5px;">Personalizable</span>
+                                </td>
+                                <td th:text="${producto.categoria?.nombre ?: 'Sin categoría'}">Categoría</td>
+                                <td th:text="${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</td>
+                                <td th:text="${producto.stock}">0</td>
+                                <td>
+                                    <span th:class="${producto.activo ? 'badge badge-success' : 'badge badge-danger'}"
+                                          th:text="${producto.activo ? 'Activo' : 'Inactivo'}">Estado</span>
+                                </td>
+                                <td>
+                                    <a th:href="@{/admin/productos/editar/{id}(id=${producto.id})}" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form th:action="@{/admin/productos/eliminar/{id}(id=${producto.id})}" method="post" 
+                                          style="display: inline;" onsubmit="return confirm('¿Eliminar este producto?')">
+                                        <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${productos == null || productos.isEmpty()}" class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <p>No hay productos registrados</p>
+                        <a th:href="@{/admin/productos/nuevo}" class="btn btn-primary">Crear Primer Producto</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

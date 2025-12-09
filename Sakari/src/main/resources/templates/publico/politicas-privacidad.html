@@ -1,121 +1,100 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Sakari</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+<head th:replace="~{fragments/head :: head('Política de Privacidad')}"></head>
 <body>
-    <nav class="navbar">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-header">
         <div class="container">
-            <div class="nav-brand">
-                <a th:href="@{/}">
-                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="logo-text" style="display:none;">SAKARI</span>
-                </a>
-            </div>
-            
-            <ul class="nav-menu">
-                <li><a th:href="@{/inicio}">Inicio</a></li>
-                <li><a th:href="@{/productos}">Productos</a></li>
-            </ul>
+            <h1><i class="fas fa-shield-alt me-2"></i>Política de Privacidad</h1>
+            <p>Tu privacidad es importante para nosotros</p>
         </div>
-    </nav>
+    </section>
 
-    <main class="main-content">
-        <div class="auth-container">
-            <div class="auth-card">
-                <div class="auth-header">
-                    <i class="fas fa-user-plus"></i>
-                    <h2>Crear Cuenta</h2>
-                </div>
+    <main class="main-content py-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="legal-content">
+                        <h2>1. Información que Recopilamos</h2>
+                        <p>En SAKARI Sublimados, recopilamos información para brindarte un mejor servicio. Los datos que podemos recopilar incluyen:</p>
+                        
+                        <h3>Información Personal</h3>
+                        <ul>
+                            <li>Nombre completo</li>
+                            <li>Dirección de correo electrónico</li>
+                            <li>Número de teléfono</li>
+                            <li>Dirección de envío</li>
+                        </ul>
 
-                <div th:if="${error}" class="alert alert-error">
-                    <span th:text="${error}"></span>
-                </div>
+                        <h3>Información de Transacciones</h3>
+                        <ul>
+                            <li>Historial de compras</li>
+                            <li>Productos visualizados</li>
+                            <li>Preferencias de personalización</li>
+                        </ul>
 
-                <form th:action="@{/registro}" th:object="${usuario}" method="post" class="auth-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="nombre">
-                                <i class="fas fa-user"></i> Nombre
-                            </label>
-                            <input type="text" id="nombre" th:field="*{nombre}" required 
-                                   placeholder="Tu nombre">
-                            <span class="error" th:if="${#fields.hasErrors('nombre')}" 
-                                  th:errors="*{nombre}"></span>
-                        </div>
+                        <h2>2. Uso de la Información</h2>
+                        <p>Utilizamos la información recopilada para:</p>
+                        <ul>
+                            <li>Procesar y completar tus pedidos</li>
+                            <li>Enviarte actualizaciones sobre el estado de tu compra</li>
+                            <li>Mejorar nuestros productos y servicios</li>
+                            <li>Responder a tus consultas y solicitudes</li>
+                            <li>Enviarte promociones y ofertas (con tu consentimiento)</li>
+                        </ul>
 
-                        <div class="form-group">
-                            <label for="apellido">
-                                <i class="fas fa-user"></i> Apellido
-                            </label>
-                            <input type="text" id="apellido" th:field="*{apellido}" required 
-                                   placeholder="Tu apellido">
-                            <span class="error" th:if="${#fields.hasErrors('apellido')}" 
-                                  th:errors="*{apellido}"></span>
-                        </div>
+                        <h2>3. Protección de Datos</h2>
+                        <p>Implementamos medidas de seguridad técnicas y organizativas para proteger tu información personal contra acceso no autorizado, alteración, divulgación o destrucción. Estas medidas incluyen:</p>
+                        <ul>
+                            <li>Encriptación de datos sensibles</li>
+                            <li>Acceso restringido a información personal</li>
+                            <li>Monitoreo regular de nuestros sistemas</li>
+                            <li>Capacitación del personal en protección de datos</li>
+                        </ul>
+
+                        <h2>4. Compartir Información</h2>
+                        <p>No vendemos ni alquilamos tu información personal a terceros. Podemos compartir información únicamente con:</p>
+                        <ul>
+                            <li>Proveedores de servicios de envío para completar entregas</li>
+                            <li>Procesadores de pago para transacciones seguras</li>
+                            <li>Autoridades legales cuando sea requerido por ley</li>
+                        </ul>
+
+                        <h2>5. Cookies</h2>
+                        <p>Utilizamos cookies para mejorar tu experiencia de navegación. Las cookies nos permiten:</p>
+                        <ul>
+                            <li>Recordar tus preferencias</li>
+                            <li>Mantener tu sesión activa</li>
+                            <li>Analizar el tráfico del sitio</li>
+                        </ul>
+                        <p>Puedes configurar tu navegador para rechazar cookies, aunque esto puede afectar la funcionalidad del sitio.</p>
+
+                        <h2>6. Tus Derechos</h2>
+                        <p>De acuerdo con la legislación costarricense, tienes derecho a:</p>
+                        <ul>
+                            <li>Acceder a tu información personal</li>
+                            <li>Rectificar datos incorrectos</li>
+                            <li>Solicitar la eliminación de tus datos</li>
+                            <li>Oponerte al tratamiento de tus datos</li>
+                            <li>Retirar tu consentimiento en cualquier momento</li>
+                        </ul>
+
+                        <h2>7. Contacto</h2>
+                        <p>Si tienes preguntas sobre nuestra política de privacidad o deseas ejercer tus derechos, contáctanos:</p>
+                        <ul>
+                            <li>Correo: <a href="mailto:privacidad@sakari.cr">privacidad@sakari.cr</a></li>
+                            <li>Teléfono: +506 8873-5743</li>
+                        </ul>
+
+                        <h2>8. Cambios en la Política</h2>
+                        <p>Nos reservamos el derecho de modificar esta política de privacidad en cualquier momento. Los cambios serán publicados en esta página con la fecha de actualización correspondiente.</p>
                     </div>
-
-                    <div class="form-group">
-                        <label for="email">
-                            <i class="fas fa-envelope"></i> Email
-                        </label>
-                        <input type="email" id="email" th:field="*{email}" required 
-                               placeholder="tu@email.com">
-                        <span class="error" th:if="${#fields.hasErrors('email')}" 
-                              th:errors="*{email}"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="telefono">
-                            <i class="fas fa-phone"></i> Teléfono
-                        </label>
-                        <input type="tel" id="telefono" th:field="*{telefono}" 
-                               placeholder="1234-5678">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="direccion">
-                            <i class="fas fa-map-marker-alt"></i> Dirección
-                        </label>
-                        <textarea id="direccion" th:field="*{direccion}" rows="3" 
-                                  placeholder="Tu dirección completa"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">
-                            <i class="fas fa-lock"></i> Contraseña
-                        </label>
-                        <input type="password" id="password" th:field="*{password}" required 
-                               placeholder="Mínimo 6 caracteres" minlength="6">
-                        <span class="error" th:if="${#fields.hasErrors('password')}" 
-                              th:errors="*{password}"></span>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <i class="fas fa-user-plus"></i> Registrarse
-                    </button>
-                </form>
-
-                <div class="auth-footer">
-                    <p>¿Ya tienes una cuenta? <a th:href="@{/login}">Inicia sesión aquí</a></p>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024 Sakari. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script th:src="@{/js/script.js}"></script>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

@@ -1,72 +1,98 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <nav class="navbar" th:fragment="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <a th:href="@{/}">
-                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="logo-text" style="display:none;">SAKARI</span>
-                </a>
-            </div>
-            
-            <ul class="nav-menu" id="navMenu">
-                <li><a th:href="@{/inicio}">Inicio</a></li>
-                <li><a th:href="@{/productos}">Productos</a></li>
-                <li><a th:href="@{/personalizaciones}">Personalizaciones</a></li>
-                <li><a th:href="@{/quienes-somos}">¿Quiénes Somos?</a></li>
-                <li><a th:href="@{/contacto}">Contáctenos</a></li>
-                
-                <!-- Mostrar si NO está autenticado -->
-                <li sec:authorize="!isAuthenticated()">
-                    <a th:href="@{/login}" class="btn-login">
-                        <i class="fas fa-user"></i> Iniciar Sesión
+
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <span class="brand-logo">
+                <i class="fas fa-tshirt"></i>
+                <span class="brand-text">SAKARI</span>
+                <span class="brand-sub">Sublimados</span>
+            </span>
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" 
+                aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activePage == 'inicio' ? 'active' : ''}" th:href="@{/}">
+                        <i class="fas fa-home me-1"></i>Inicio
                     </a>
                 </li>
-                
-                <!-- Mostrar si ESTÁ autenticado -->
-                <li sec:authorize="isAuthenticated()">
-                    <a href="#" class="btn-login">
-                        <i class="fas fa-user"></i> 
-                        <span sec:authentication="name"></span>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activePage == 'productos' ? 'active' : ''}" th:href="@{/productos}">
+                        <i class="fas fa-box me-1"></i>Productos
                     </a>
                 </li>
-                
-                <!-- Panel de Admin (solo para ADMIN) -->
-                <li sec:authorize="hasRole('ADMIN')">
-                    <a th:href="@{/admin}" class="btn-login">
-                        <i class="fas fa-cog"></i> Admin
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activePage == 'personalizaciones' ? 'active' : ''}" th:href="@{/personalizaciones}">
+                        <i class="fas fa-paint-brush me-1"></i>Personalizar
                     </a>
                 </li>
-                
-                <!-- Carrito -->
-                <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{/carrito}" class="btn-cart">
-                        <i class="fas fa-shopping-cart"></i> Carrito
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activePage == 'quienes-somos' ? 'active' : ''}" th:href="@{/quienes-somos}">
+                        <i class="fas fa-users me-1"></i>Nosotros
                     </a>
                 </li>
-                
-                <!-- Cerrar sesión -->
-                <li sec:authorize="isAuthenticated()">
-                    <form th:action="@{/logout}" method="post" style="display: inline;">
-                        <button type="submit" class="btn-login" style="background: #e74c3c;">
-                            <i class="fas fa-sign-out-alt"></i> Salir
-                        </button>
-                    </form>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activePage == 'contacto' ? 'active' : ''}" th:href="@{/contacto}">
+                        <i class="fas fa-envelope me-1"></i>Contacto
+                    </a>
                 </li>
             </ul>
             
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
+            <!-- Usuario autenticado -->
+            <div sec:authorize="isAuthenticated()" class="d-flex align-items-center gap-2">
+                <a th:href="@{/carrito}" class="btn btn-outline-light btn-sm position-relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartCount">0</span>
+                </a>
+                
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span sec:authentication="name" class="d-none d-md-inline">Usuario</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/perfil}"><i class="fas fa-user me-2"></i>Mi Perfil</a></li>
+                        <li><a class="dropdown-item" th:href="@{/perfil/pedidos}"><i class="fas fa-shopping-bag me-2"></i>Mis Pedidos</a></li>
+                        <li sec:authorize="hasRole('ADMIN')">
+                            <hr class="dropdown-divider">
+                            <a class="dropdown-item text-primary fw-bold" th:href="@{/admin}">
+                                <i class="fas fa-cog me-2"></i>Panel Admin
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" class="px-2 py-1">
+                                <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                    <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Usuario no autenticado -->
+            <div sec:authorize="!isAuthenticated()" class="d-flex gap-2">
+                <a th:href="@{/login}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-sign-in-alt me-1"></i> Ingresar
+                </a>
+                <a th:href="@{/registro}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-user-plus me-1"></i> Registrarse
+                </a>
             </div>
         </div>
-    </nav>
-</body>
+    </div>
+</nav>
+
+<!-- Bootstrap JS necesario para el navbar -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </html>

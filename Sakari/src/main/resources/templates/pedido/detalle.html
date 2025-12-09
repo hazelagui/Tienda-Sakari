@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/head :: head('Detalle del Pedido')}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-receipt"></i> Pedido <span th:text="${pedido.numeroPedido}">PED-XXX</span></h1>
+                <a th:href="@{/perfil/pedidos}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                <!-- Detalles del pedido -->
+                <div>
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <h3><i class="fas fa-info-circle"></i> Estado del Pedido</h3>
+                            <span th:class="${'badge badge-' + pedido.estado.name().toLowerCase()}"
+                                  th:text="${pedido.estado}"
+                                  style="padding: 0.5rem 1.5rem; font-size: 1rem;">Estado</span>
+                        </div>
+                        
+                        <div class="timeline">
+                            <div th:classappend="${pedido.estado.name() != 'CANCELADO' ? 'active' : ''}" class="timeline-item">
+                                <i class="fas fa-clock"></i>
+                                <span>Pendiente</span>
+                            </div>
+                            <div th:classappend="${pedido.estado.ordinal() >= 1 && pedido.estado.name() != 'CANCELADO' ? 'active' : ''}" class="timeline-item">
+                                <i class="fas fa-cogs"></i>
+                                <span>Procesando</span>
+                            </div>
+                            <div th:classappend="${pedido.estado.ordinal() >= 2 && pedido.estado.name() != 'CANCELADO' ? 'active' : ''}" class="timeline-item">
+                                <i class="fas fa-shipping-fast"></i>
+                                <span>Enviado</span>
+                            </div>
+                            <div th:classappend="${pedido.estado.name() == 'ENTREGADO' ? 'active' : ''}" class="timeline-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Entregado</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3><i class="fas fa-shopping-bag"></i> Productos</h3>
+                        <div th:each="item : ${pedido.items}" class="product-item">
+                            <img th:src="${item.producto.imagenUrl != null ? item.producto.imagenUrl : '/img/placeholder.jpg'}"
+                                 th:alt="${item.producto.nombre}"
+                                 onerror="this.src='https://via.placeholder.com/80x80/8b5e9f/ffffff?text=IMG'">
+                            <div class="product-info">
+                                <h4 th:text="${item.producto.nombre}">Producto</h4>
+                                <p>Precio: <span th:text="'₡' + ${#numbers.formatDecimal(item.precioUnitario, 0, 2)}">₡0.00</span></p>
+                                <p>Cantidad: <span th:text="${item.cantidad}">1</span></p>
+                                <p th:if="${item.personalizacion != null && !item.personalizacion.isEmpty()}" class="personalization">
+                                    <i class="fas fa-paint-brush"></i> <span th:text="${item.personalizacion}">Personalización</span>
+                                </p>
+                            </div>
+                            <div class="product-subtotal">
+                                <span th:text="'₡' + ${#numbers.formatDecimal(item.subtotal, 0, 2)}">₡0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen -->
+                <div>
+                    <div class="detail-card summary-card">
+                        <h3><i class="fas fa-file-invoice"></i> Resumen</h3>
+                        
+                        <div class="summary-item">
+                            <span>Fecha del pedido:</span>
+                            <span th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                        </div>
+                        
+                        <div class="summary-item">
+                            <span>Teléfono:</span>
+                            <span th:text="${pedido.telefonoContacto}">N/A</span>
+                        </div>
+                        
+                        <div class="summary-item">
+                            <span>Dirección de envío:</span>
+                        </div>
+                        <p style="color: var(--text-light); margin-bottom: 1rem;" th:text="${pedido.direccionEnvio}">Dirección</p>
+                        
+                        <hr>
+                        
+                        <div class="summary-total">
+                            <span>Total:</span>
+                            <span th:text="'₡' + ${#numbers.formatDecimal(pedido.total, 0, 2)}">₡0.00</span>
+                        </div>
+
+                        <div th:if="${pedido.estado.name() == 'PENDIENTE' || pedido.estado.name() == 'PROCESANDO'}" style="margin-top: 1.5rem;">
+                            <form th:action="@{/pedidos/{id}/cancelar(id=${pedido.id})}" method="post"
+                                  onsubmit="return confirm('¿Estás seguro de cancelar este pedido?');">
+                                <button type="submit" class="btn btn-danger btn-block">
+                                    <i class="fas fa-times"></i> Cancelar Pedido
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4><i class="fas fa-question-circle"></i> ¿Necesitas ayuda?</h4>
+                        <p style="color: var(--text-light); margin-bottom: 1rem;">
+                            Si tienes alguna pregunta sobre tu pedido, no dudes en contactarnos.
+                        </p>
+                        <a th:href="@{/contacto}" class="btn btn-secondary btn-block">
+                            <i class="fas fa-envelope"></i> Contactar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <style>
+        .detail-card { background: var(--white); border-radius: 10px; box-shadow: var(--shadow); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .detail-header h3 { margin: 0; color: var(--primary-color); }
+        .timeline { display: flex; justify-content: space-between; margin-top: 1.5rem; }
+        .timeline-item { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; color: var(--text-light); }
+        .timeline-item::after { content: ''; position: absolute; top: 15px; left: 50%; width: 100%; height: 2px; background: var(--border-color); z-index: 0; }
+        .timeline-item:last-child::after { display: none; }
+        .timeline-item i { background: var(--bg-color); padding: 0.75rem; border-radius: 50%; margin-bottom: 0.5rem; z-index: 1; }
+        .timeline-item.active { color: var(--secondary-color); }
+        .timeline-item.active i { background: var(--secondary-color); color: white; }
+        .product-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border-color); }
+        .product-item:last-child { border-bottom: none; }
+        .product-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
+        .product-info { flex: 1; }
+        .product-info h4 { margin: 0 0 0.5rem; color: var(--primary-color); }
+        .product-info p { margin: 0.3rem 0; color: var(--text-light); font-size: 0.9rem; }
+        .personalization { color: var(--accent-color) !important; }
+        .product-subtotal { font-size: 1.2rem; font-weight: bold; color: var(--secondary-color); }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 0.75rem; }
+        .summary-total { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: bold; margin-top: 1rem; }
+        .summary-total span:last-child { color: var(--secondary-color); }
+        .badge-pendiente { background: #f39c12; color: white; }
+        .badge-procesando { background: #3498db; color: white; }
+        .badge-enviado { background: #9b59b6; color: white; }
+        .badge-entregado { background: #27ae60; color: white; }
+        .badge-cancelado { background: #e74c3c; color: white; }
+    </style>
+</body>
+</html>

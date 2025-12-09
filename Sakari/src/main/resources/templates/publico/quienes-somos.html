@@ -1,136 +1,157 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿Quiénes Somos? - Sakari</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+<head th:replace="~{fragments/head :: head('Quiénes Somos')}"></head>
 <body>
-    <nav class="navbar">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-header">
         <div class="container">
-            <div class="nav-brand">
-                <a th:href="@{/}">
-                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="logo" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="logo-text" style="display:none;">SAKARI</span>
-                </a>
-            </div>
-            
-            <ul class="nav-menu" id="navMenu">
-                <li><a th:href="@{/inicio}">Inicio</a></li>
-                <li><a th:href="@{/productos}">Productos</a></li>
-                <li><a th:href="@{/personalizaciones}">Personalizaciones</a></li>
-                <li><a th:href="@{/quienes-somos}" class="active">¿Quiénes Somos?</a></li>
-                <li><a th:href="@{/contacto}">Contáctenos</a></li>
-                <li><a th:href="@{/login}" class="btn-login"><i class="fas fa-user"></i> Iniciar Sesión</a></li>
-                <li><a th:href="@{/carrito}" class="btn-cart"><i class="fas fa-shopping-cart"></i> Carrito</a></li>
-            </ul>
-            
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <h1><i class="fas fa-users me-2"></i>Quiénes Somos</h1>
+            <p>Conoce la historia detrás de SAKARI</p>
         </div>
-    </nav>
+    </section>
 
-    <main class="main-content">
+    <main class="main-content py-4">
         <div class="container">
-            <div class="page-header">
-                <h1>¿Quiénes Somos?</h1>
+            <!-- Historia -->
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="text-gradient mb-3">Nuestra Historia</h2>
+                    <p class="text-muted">SAKARI nació de la pasión por crear productos únicos y personalizados. Comenzamos como un pequeño emprendimiento familiar en Costa Rica y hemos crecido gracias a la confianza de nuestros clientes.</p>
+                    <p class="text-muted">Hoy en día, somos especialistas en sublimación de alta calidad, ofreciendo una amplia gama de productos que permiten a nuestros clientes expresar su creatividad y personalidad.</p>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://img.freepik.com/fotos-premium/persona-irreconocible-trabajando-sublimacion-hierro-concepto-impresion-diseno-grafico_297446-4.jpg" 
+                         alt="Nuestro equipo" class="img-fluid rounded-3 shadow-lg">
+                </div>
             </div>
 
-            <div class="about-section">
-                <div class="about-content">
-                    <h2>Nuestra Historia</h2>
-                    <p>
-                        Sakari nació de la pasión por crear productos únicos y personalizados que reflejen 
-                        la personalidad y el estilo de cada cliente. Somos una empresa comprometida con la 
-                        calidad, la creatividad y la satisfacción del cliente.
-                    </p>
+            <!-- Misión, Visión, Valores -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-bullseye"></i></div>
+                        <h3>Misión</h3>
+                        <p>Transformar ideas en productos sublimados de alta calidad, brindando a nuestros clientes soluciones creativas y personalizadas.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-eye"></i></div>
+                        <h3>Visión</h3>
+                        <p>Ser la empresa líder en sublimación en Costa Rica, reconocida por nuestra calidad, innovación y excelente servicio al cliente.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-heart"></i></div>
+                        <h3>Valores</h3>
+                        <p>Calidad, creatividad, compromiso, honestidad y pasión por lo que hacemos en cada producto que creamos.</p>
+                    </div>
+                </div>
+            </div>
 
-                    <h2>Nuestra Misión</h2>
-                    <p>
-                        Ofrecer productos de alta calidad con un toque personal, brindando a nuestros clientes 
-                        la oportunidad de expresar su individualidad a través de artículos únicos y personalizables.
-                    </p>
-
-                    <h2>Nuestra Visión</h2>
-                    <p>
-                        Ser la empresa líder en personalización de productos en Costa Rica, reconocida por 
-                        nuestra innovación, calidad y servicio excepcional.
-                    </p>
-
-                    <h2>Nuestros Valores</h2>
-                    <div class="values-grid">
-                        <div class="value-card">
-                            <i class="fas fa-star"></i>
-                            <h3>Calidad</h3>
-                            <p>Compromiso con la excelencia en cada producto</p>
+            <!-- Proceso -->
+            <div class="mb-5">
+                <div class="section-title">
+                    <h2>Nuestro Proceso</h2>
+                    <p>Cómo llevamos tu idea a la realidad</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-3 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-lightbulb"></i></div>
+                            <h3>1. Idea</h3>
+                            <p>Recibimos tu concepto creativo</p>
                         </div>
-                        <div class="value-card">
-                            <i class="fas fa-paint-brush"></i>
-                            <h3>Creatividad</h3>
-                            <p>Innovación constante en nuestros diseños</p>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-pencil-ruler"></i></div>
+                            <h3>2. Diseño</h3>
+                            <p>Perfeccionamos tu diseño</p>
                         </div>
-                        <div class="value-card">
-                            <i class="fas fa-heart"></i>
-                            <h3>Pasión</h3>
-                            <p>Amor por lo que hacemos</p>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-print"></i></div>
+                            <h3>3. Producción</h3>
+                            <p>Sublimamos con precisión</p>
                         </div>
-                        <div class="value-card">
-                            <i class="fas fa-handshake"></i>
-                            <h3>Compromiso</h3>
-                            <p>Dedicación a la satisfacción del cliente</p>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-truck"></i></div>
+                            <h3>4. Entrega</h3>
+                            <p>Lo llevamos a tu puerta</p>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Por qué elegirnos -->
+            <div class="mb-4">
+                <div class="section-title">
+                    <h2>¿Por qué Elegirnos?</h2>
+                    <p>Lo que nos hace diferentes</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon" style="background: var(--gradient-secondary);"><i class="fas fa-award"></i></div>
+                            <h3>Calidad Premium</h3>
+                            <p>Materiales de primera</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon" style="background: var(--gradient-warm);"><i class="fas fa-bolt"></i></div>
+                            <h3>Entrega Rápida</h3>
+                            <p>Tiempos optimizados</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                            <h3>Soporte</h3>
+                            <p>Atención personalizada</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon" style="background: var(--gradient-warm);"><i class="fas fa-palette"></i></div>
+                            <h3>Creatividad</h3>
+                            <p>Diseños únicos</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon" style="background: var(--gradient-secondary);"><i class="fas fa-shield-alt"></i></div>
+                            <h3>Garantía</h3>
+                            <p>Respaldamos nuestro trabajo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-6">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-smile"></i></div>
+                            <h3>Satisfacción</h3>
+                            <p>Clientes felices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <section class="cta-section rounded-3 mt-4">
+                <h2>¿Listo para crear algo único?</h2>
+                <p>Contáctanos y hagamos realidad tu proyecto</p>
+                <a th:href="@{/contacto}" class="btn btn-lg">
+                    <i class="fas fa-paper-plane me-2"></i>Contáctanos
+                </a>
+            </section>
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <img th:src="@{/images/logo.png}" alt="Sakari Logo" class="footer-logo"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <h3 class="footer-logo-text" style="display:none;">SAKARI</h3>
-                    <p class="footer-description">Productos únicos y personalizados para ti</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Contacto</h4>
-                    <ul class="footer-contact">
-                        <li><i class="fas fa-phone"></i> <a href="tel:+50612345678">+506 1234-5678</a></li>
-                        <li><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#2940474f46695a4842485b40074a4644"><span class="__cf_email__" data-cfemail="d6bfb8b0b996a5b7bdb7a4bff8b5b9bb">[email&#160;protected]</span></a></li>
-                        <li><i class="fas fa-map-marker-alt"></i> San José, Costa Rica</li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Información</h4>
-                    <ul class="footer-links">
-                        <li><a th:href="@{/quienes-somos}">Quiénes Somos</a></li>
-                        <li><a th:href="@{/politicas-privacidad}">Políticas de Privacidad</a></li>
-                        <li><a th:href="@{/terminos-condiciones}">Términos y Condiciones</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Síguenos</h4>
-                    <div class="social-links">
-                        <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="https://instagram.com" target="_blank" aria-label="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2024 Sakari. Todos los derechos re
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

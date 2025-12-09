@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin Sakari</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <th:block th:replace="~{admin/fragments/admin-layout :: styles}"></th:block>
+    <style>
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--white); padding: 1.25rem; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 1rem; border: 1px solid var(--gray-100); }
+        .stat-icon { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+        .stat-icon.blue { background: rgba(59, 130, 246, 0.1); color: #3B82F6; }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.1); color: #10B981; }
+        .stat-icon.purple { background: rgba(139, 92, 246, 0.1); color: #8B5CF6; }
+        .stat-icon.red { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+        .stat-info h3 { font-size: 1.75rem; font-weight: 700; color: var(--gray-800); }
+        .stat-info p { color: var(--gray-500); font-size: 0.85rem; }
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .action-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; color: white; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+        .action-btn i { font-size: 1.75rem; margin-bottom: 8px; }
+        .action-btn:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .action-btn.purple { background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); }
+        .action-btn.blue { background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%); }
+        .action-btn.orange { background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%); }
+        .action-btn.green { background: linear-gradient(135deg, #10B981 0%, #14B8A6 100%); }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <th:block th:replace="~{admin/fragments/admin-layout :: sidebar('dashboard')}"></th:block>
+
+        <main class="admin-content">
+            <h1 class="page-title"><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-box"></i></div>
+                    <div class="stat-info">
+                        <h3 th:text="${stats.totalProductos}">0</h3>
+                        <p>Productos</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h3 th:text="${stats.totalUsuarios}">0</h3>
+                        <p>Usuarios</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="stat-info">
+                        <h3 th:text="${stats.totalPedidos}">0</h3>
+                        <p>Pedidos</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="fas fa-envelope"></i></div>
+                    <div class="stat-info">
+                        <h3 th:text="${stats.mensajesNoLeidos}">0</h3>
+                        <p>Mensajes sin leer</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h3><i class="fas fa-clock"></i> Pedidos Recientes</h3>
+                    <a th:href="@{/admin/pedidos}" class="btn btn-sm btn-secondary">Ver Todos</a>
+                </div>
+                <div class="admin-card-body" style="padding: 0;">
+                    <table class="admin-table" th:if="${pedidosRecientes != null && !pedidosRecientes.isEmpty()}">
+                        <thead>
+                            <tr>
+                                <th>Nº Pedido</th>
+                                <th>Cliente</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="pedido : ${pedidosRecientes}">
+                                <td th:text="${pedido.numeroPedido}">PED-XXX</td>
+                                <td th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellido}">Cliente</td>
+                                <td th:text="${#numbers.formatDecimal(pedido.total, 0, 'COMMA', 0, 'POINT')} + ' ₡'">₡0</td>
+                                <td>
+                                    <span th:class="'badge badge-' + ${pedido.estado.name().toLowerCase()}"
+                                          th:text="${pedido.estado}">Estado</span>
+                                </td>
+                                <td th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy')}">Fecha</td>
+                                <td>
+                                    <a th:href="@{/admin/pedidos/{id}(id=${pedido.id})}" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${pedidosRecientes == null || pedidosRecientes.isEmpty()}" class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>No hay pedidos recientes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <a th:href="@{/admin/productos/nuevo}" class="action-btn purple">
+                    <i class="fas fa-plus-circle"></i>
+                    Nuevo Producto
+                </a>
+                <a th:href="@{/admin/categorias/nueva}" class="action-btn blue">
+                    <i class="fas fa-folder-plus"></i>
+                    Nueva Categoría
+                </a>
+                <a th:href="@{/admin/pedidos}" class="action-btn orange">
+                    <i class="fas fa-clipboard-list"></i>
+                    Ver Pedidos
+                </a>
+                <a th:href="@{/admin/mensajes}" class="action-btn green">
+                    <i class="fas fa-envelope-open-text"></i>
+                    Ver Mensajes
+                </a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

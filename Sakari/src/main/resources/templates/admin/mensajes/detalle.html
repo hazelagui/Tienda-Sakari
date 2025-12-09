@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle Mensaje - Admin Sakari</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <th:block th:replace="~{admin/fragments/admin-layout :: styles}"></th:block>
+</head>
+<body>
+    <div class="admin-container">
+        <th:block th:replace="~{admin/fragments/admin-layout :: sidebar('mensajes')}"></th:block>
+        
+        <main class="admin-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h1 class="page-title" style="margin-bottom: 0;">
+                    <i class="fas fa-envelope-open-text"></i> Mensaje
+                </h1>
+                <a th:href="@{/admin/mensajes}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </div>
+
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h3 th:text="${mensaje.asunto}">Asunto</h3>
+                    <span th:class="${mensaje.leido ? 'badge badge-success' : 'badge badge-warning'}"
+                          th:text="${mensaje.leido ? 'Leído' : 'Nuevo'}">Estado</span>
+                </div>
+                <div class="admin-card-body">
+                    <div class="info-grid" style="margin-bottom: 1.5rem;">
+                        <div class="info-item">
+                            <label>De</label>
+                            <span th:text="${mensaje.nombre}">Nombre</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Email</label>
+                            <span>
+                                <a th:href="'mailto:' + ${mensaje.email}" style="color: var(--primary);" th:text="${mensaje.email}">email</a>
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <label>Teléfono</label>
+                            <span th:text="${mensaje.telefono ?: 'No proporcionado'}">Tel</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Fecha</label>
+                            <span th:text="${#temporals.format(mensaje.fechaEnvio, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--gray-50); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <label class="form-label">Mensaje</label>
+                        <p style="white-space: pre-wrap; margin: 0;" th:text="${mensaje.mensaje}">Contenido del mensaje</p>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem;">
+                        <a th:href="'mailto:' + ${mensaje.email} + '?subject=Re: ' + ${mensaje.asunto}" class="btn btn-primary">
+                            <i class="fas fa-reply"></i> Responder por Email
+                        </a>
+                        <form th:if="${!mensaje.leido}" th:action="@{/admin/mensajes/{id}/leido(id=${mensaje.id})}" method="post">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check"></i> Marcar como Leído
+                            </button>
+                        </form>
+                        <form th:action="@{/admin/mensajes/eliminar/{id}(id=${mensaje.id})}" method="post"
+                              onsubmit="return confirm('¿Eliminar este mensaje?')">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

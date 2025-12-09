@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/head :: head('Inicio')}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Productos <span>Únicos</span> para Ti</h1>
+            <p>Sublimación de alta calidad. Transforma tus ideas en productos personalizados que cuentan tu historia.</p>
+            <div class="hero-buttons">
+                <a th:href="@{/productos}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-bag"></i> Ver Catálogo
+                </a>
+                <a th:href="@{/personalizaciones}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-magic"></i> Personalizar
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-palette"></i></div>
+                    <h3>Diseños Únicos</h3>
+                    <p>Creamos productos con tu estilo personal</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-award"></i></div>
+                    <h3>Alta Calidad</h3>
+                    <p>Materiales premium y acabados profesionales</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-truck"></i></div>
+                    <h3>Envío Rápido</h3>
+                    <p>Entrega segura en todo Costa Rica</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-heart"></i></div>
+                    <h3>Hecho con Amor</h3>
+                    <p>Cada producto es elaborado con dedicación</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Estadísticas -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-title">
+                <h2>Estamos orgullosos de nuestros números</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">Años de experiencia</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10k</div>
+                    <div class="stat-label">Productos realizados</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">+10</div>
+                    <div class="stat-label">Tipos de personalización</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Categorías</h2>
+                <p>Explora nuestras líneas de productos</p>
+            </div>
+            <div class="category-grid">
+                <a th:href="@{/productos?categoria=1}" class="category-card">
+                    <div class="category-icon"><i class="fas fa-tshirt"></i></div>
+                    <h3>Camisetas</h3>
+                    <p>Diseños únicos</p>
+                </a>
+                <a th:href="@{/productos?categoria=2}" class="category-card">
+                    <div class="category-icon"><i class="fas fa-mug-hot"></i></div>
+                    <h3>Tazas</h3>
+                    <p>Para tu café favorito</p>
+                </a>
+                <a th:href="@{/productos?categoria=3}" class="category-card">
+                    <div class="category-icon"><i class="fas fa-hat-cowboy"></i></div>
+                    <h3>Gorras</h3>
+                    <p>Estilo personalizado</p>
+                </a>
+                <a th:href="@{/productos?categoria=4}" class="category-card">
+                    <div class="category-icon"><i class="fas fa-couch"></i></div>
+                    <h3>Cojines</h3>
+                    <p>Decora tu espacio</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products - Solo productos destacados sin duplicados -->
+    <section class="products-section" th:if="${productos != null and !productos.isEmpty()}">
+        <div class="container">
+            <div class="section-title">
+                <h2>Productos Destacados</h2>
+                <p>Los favoritos de nuestros clientes</p>
+            </div>
+            <div class="products-grid">
+                <div th:each="producto, iterStat : ${productos}" th:if="${iterStat.index < 4}" class="product-card">
+                    <div class="product-image">
+                        <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}" 
+                             onerror="this.src='https://via.placeholder.com/400x400?text=Sakari'">
+                        <span th:if="${producto.personalizable}" class="product-badge">
+                            <i class="fas fa-magic me-1"></i>Personalizable
+                        </span>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category" th:text="${producto.categoria?.nombre ?: 'General'}">Categoría</span>
+                        <h3 class="product-title" th:text="${producto.nombre}">Producto</h3>
+                        <p class="product-price" th:text="${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</p>
+                    </div>
+                    <div class="product-actions">
+                        <a th:href="@{/productos/{id}(id=${producto.id})}" class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
+                        <button class="btn btn-primary" onclick="agregarAlCarrito(this)" th:data-id="${producto.id}">
+                            <i class="fas fa-cart-plus"></i> Añadir
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a th:href="@{/productos}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-th-large me-2"></i>Ver Todo el Catálogo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>¿Tienes una idea especial?</h2>
+            <p>Contáctanos y hagamos realidad tu proyecto personalizado</p>
+            <a th:href="@{/contacto}" class="btn btn-lg">
+                <i class="fas fa-paper-plane me-2"></i>Contáctanos
+            </a>
+        </div>
+    </section>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script th:inline="javascript">
+        function agregarAlCarrito(btn) {
+            const productoId = btn.dataset.id;
+            fetch('/carrito/agregar/' + productoId, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    actualizarContadorCarrito();
+                    btn.innerHTML = '<i class="fas fa-check"></i> Añadido';
+                    btn.classList.remove('btn-primary');
+                    btn.classList.add('btn-success');
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-cart-plus"></i> Añadir';
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-primary');
+                    }, 2000);
+                }
+            })
+            .catch(err => console.error('Error:', err));
+        }
+
+        function actualizarContadorCarrito() {
+            fetch('/carrito/count')
+                .then(r => r.json())
+                .then(count => {
+                    const badge = document.getElementById('cartCount');
+                    if (badge) {
+                        badge.textContent = count;
+                        badge.style.display = count > 0 ? 'flex' : 'none';
+                    }
+                })
+                .catch(() => {});
+        }
+
+        document.addEventListener('DOMContentLoaded', actualizarContadorCarrito);
+    </script>
+</body>
+</html>

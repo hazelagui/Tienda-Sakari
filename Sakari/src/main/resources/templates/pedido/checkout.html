@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/head :: head('Checkout')}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-credit-card"></i> Finalizar Compra</h1>
+            </div>
+
+            <div th:if="${error}" class="alert alert-error">
+                <span th:text="${error}"></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                <!-- Formulario de envío -->
+                <div style="background: var(--white); padding: 2rem; border-radius: 10px; box-shadow: var(--shadow);">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--primary-color);">
+                        <i class="fas fa-shipping-fast"></i> Información de Envío
+                    </h2>
+
+                    <form th:action="@{/pedidos/procesar}" method="post" id="checkoutForm">
+                        <div class="form-group">
+                            <label for="nombreCompleto">
+                                <i class="fas fa-user"></i> Nombre Completo
+                            </label>
+                            <input type="text" id="nombreCompleto" 
+                                   th:value="${usuario.nombre + ' ' + usuario.apellido}" disabled
+                                   style="background: var(--bg-color);">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input type="email" id="email" th:value="${usuario.email}" disabled
+                                   style="background: var(--bg-color);">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefonoContacto">
+                                <i class="fas fa-phone"></i> Teléfono de Contacto *
+                            </label>
+                            <input type="tel" id="telefonoContacto" name="telefonoContacto" required
+                                   th:value="${usuario.telefono}" placeholder="8888-8888">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="direccionEnvio">
+                                <i class="fas fa-map-marker-alt"></i> Dirección de Envío *
+                            </label>
+                            <textarea id="direccionEnvio" name="direccionEnvio" rows="4" required
+                                      placeholder="Dirección completa de entrega (provincia, cantón, distrito, señas)"
+                                      th:text="${usuario.direccion}"></textarea>
+                        </div>
+
+                        <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; margin-top: 1.5rem;">
+                            <h4 style="margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Información de Pago</h4>
+                            <p style="color: var(--text-light); font-size: 0.9rem;">
+                                El pago se realizará al momento de la entrega (Contra Entrega) o por transferencia bancaria.
+                                Nos pondremos en contacto contigo para coordinar los detalles.
+                            </p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1.5rem;">
+                            <i class="fas fa-check"></i> Confirmar Pedido
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Resumen del pedido -->
+                <div>
+                    <div style="background: var(--white); padding: 2rem; border-radius: 10px; box-shadow: var(--shadow); position: sticky; top: 100px;">
+                        <h2 style="margin-bottom: 1.5rem; color: var(--primary-color);">
+                            <i class="fas fa-shopping-cart"></i> Resumen del Pedido
+                        </h2>
+
+                        <div th:each="item : ${carrito.items}" 
+                             style="display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border-color);">
+                            <img th:src="${item.producto.imagenUrl != null ? item.producto.imagenUrl : '/img/placeholder.jpg'}" 
+                                 th:alt="${item.producto.nombre}"
+                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;"
+                                 onerror="this.src='https://via.placeholder.com/60x60/8b5e9f/ffffff?text=IMG'">
+                            <div style="flex: 1;">
+                                <p style="font-weight: 500;" th:text="${item.producto.nombre}">Producto</p>
+                                <p style="font-size: 0.9rem; color: var(--text-light);">
+                                    Cantidad: <span th:text="${item.cantidad}">1</span>
+                                </p>
+                                <p th:if="${item.personalizacion != null && !item.personalizacion.isEmpty()}" 
+                                   style="font-size: 0.8rem; color: var(--accent-color);">
+                                    <i class="fas fa-paint-brush"></i> Personalizado
+                                </p>
+                            </div>
+                            <p style="font-weight: bold; color: var(--secondary-color);" 
+                               th:text="'₡' + ${#numbers.formatDecimal(item.subtotal, 0, 2)}">₡0.00</p>
+                        </div>
+
+                        <div style="margin-top: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Subtotal:</span>
+                                <span th:text="'₡' + ${#numbers.formatDecimal(total, 0, 2)}">₡0.00</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Envío:</span>
+                                <span>Por coordinar</span>
+                            </div>
+                            <div style="border-top: 2px solid var(--border-color); padding-top: 1rem; margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold;">
+                                    <span>Total:</span>
+                                    <span style="color: var(--secondary-color);" 
+                                          th:text="'₡' + ${#numbers.formatDecimal(total, 0, 2)}">₡0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a th:href="@{/carrito}" class="btn btn-secondary btn-block" style="margin-top: 1rem;">
+                            <i class="fas fa-arrow-left"></i> Volver al Carrito
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

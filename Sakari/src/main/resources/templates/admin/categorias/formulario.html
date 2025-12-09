@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${categoria.id != null ? 'Editar' : 'Nueva'} + ' Categoría - Admin Sakari'">Categoría - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <th:block th:replace="~{admin/fragments/admin-layout :: styles}"></th:block>
+</head>
+<body>
+    <div class="admin-container">
+        <th:block th:replace="~{admin/fragments/admin-layout :: sidebar('categorias')}"></th:block>
+        
+        <main class="admin-content">
+            <h1 class="page-title">
+                <i class="fas fa-tags"></i> 
+                <span th:text="${categoria.id != null ? 'Editar Categoría' : 'Nueva Categoría'}">Categoría</span>
+            </h1>
+
+            <div class="admin-card">
+                <div class="admin-card-body">
+                    <form th:action="${categoria.id != null ? '/admin/categorias/editar/' + categoria.id : '/admin/categorias/nueva'}" 
+                          method="post" th:object="${categoria}">
+                        
+                        <div style="max-width: 500px;">
+                            <div style="margin-bottom: 1rem;">
+                                <label class="form-label">Nombre *</label>
+                                <input type="text" th:field="*{nombre}" class="form-control" required>
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <label class="form-label">Descripción</label>
+                                <textarea th:field="*{descripcion}" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Guardar
+                            </button>
+                            <a th:href="@{/admin/categorias}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

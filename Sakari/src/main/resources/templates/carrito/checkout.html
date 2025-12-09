@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/head :: head('Confirmar Pedido')}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-credit-card me-2"></i>Confirmar Pedido</h1>
+            <p>Completa tu información para finalizar la compra</p>
+        </div>
+    </section>
+
+    <main class="main-content py-4">
+        <div class="container">
+            <div th:if="${error}" class="alert alert-danger">
+                <i class="fas fa-exclamation-circle me-2"></i><span th:text="${error}"></span>
+            </div>
+
+            <form th:action="@{/carrito/procesar-pedido}" method="post">
+                <div class="row g-4">
+                    <!-- Datos de envío -->
+                    <div class="col-lg-7">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-truck me-2"></i>Información de Envío
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="nombre" class="form-label">Nombre *</label>
+                                        <input type="text" id="nombre" name="nombre" class="form-control" 
+                                               th:value="${usuario.nombre}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="apellido" class="form-label">Apellido *</label>
+                                        <input type="text" id="apellido" name="apellido" class="form-control" 
+                                               th:value="${usuario.apellido}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email *</label>
+                                        <input type="email" id="email" name="email" class="form-control" 
+                                               th:value="${usuario.email}" readonly style="background: var(--gray-100);">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="telefono" class="form-label">Teléfono *</label>
+                                        <input type="tel" id="telefono" name="telefono" class="form-control" 
+                                               th:value="${usuario.telefono}" required placeholder="+506 8888-8888">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="direccion" class="form-label">Dirección de Envío *</label>
+                                        <textarea id="direccion" name="direccion" class="form-control" rows="2" required
+                                                  th:text="${usuario.direccion}" placeholder="Dirección completa"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="notas" class="form-label">Notas del Pedido (opcional)</label>
+                                        <textarea id="notas" name="notas" class="form-control" rows="2" 
+                                                  placeholder="Instrucciones especiales de entrega..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-wallet me-2"></i>Método de Pago
+                            </div>
+                            <div class="card-body">
+                                <div class="form-check mb-3 p-3 border rounded">
+                                    <input class="form-check-input" type="radio" name="metodoPago" id="sinpe" value="SINPE" checked>
+                                    <label class="form-check-label w-100" for="sinpe">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-mobile-alt text-primary me-3 fs-4"></i>
+                                            <div>
+                                                <strong>SINPE Móvil</strong>
+                                                <p class="mb-0 text-muted small">Pago rápido desde tu celular</p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="form-check mb-3 p-3 border rounded">
+                                    <input class="form-check-input" type="radio" name="metodoPago" id="transferencia" value="TRANSFERENCIA">
+                                    <label class="form-check-label w-100" for="transferencia">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-university text-primary me-3 fs-4"></i>
+                                            <div>
+                                                <strong>Transferencia Bancaria</strong>
+                                                <p class="mb-0 text-muted small">Transferencia desde tu banco</p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="form-check p-3 border rounded">
+                                    <input class="form-check-input" type="radio" name="metodoPago" id="efectivo" value="EFECTIVO">
+                                    <label class="form-check-label w-100" for="efectivo">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-money-bill-wave text-success me-3 fs-4"></i>
+                                            <div>
+                                                <strong>Efectivo</strong>
+                                                <p class="mb-0 text-muted small">Pago contra entrega</p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumen del pedido -->
+                    <div class="col-lg-5">
+                        <div class="card sticky-top" style="top: 100px;">
+                            <div class="card-header">
+                                <i class="fas fa-receipt me-2"></i>Resumen del Pedido
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3" style="max-height: 250px; overflow-y: auto;">
+                                    <div th:each="item : ${carrito.items}" class="d-flex align-items-center mb-3 pb-2 border-bottom">
+                                        <img th:src="${item.producto.imagenUrl}" class="rounded me-3" 
+                                             style="width: 50px; height: 50px; object-fit: cover;"
+                                             onerror="this.src='https://via.placeholder.com/50'">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-0 small" th:text="${item.producto.nombre}">Producto</h6>
+                                            <small class="text-muted">Cant: <span th:text="${item.cantidad}">1</span></small>
+                                        </div>
+                                        <span class="fw-bold small" th:text="${#numbers.formatDecimal(item.subtotal, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal</span>
+                                    <span th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Envío</span>
+                                    <span class="text-success">Gratis</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <span class="fw-bold fs-5">Total</span>
+                                    <span class="fw-bold fs-5 text-primary" th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')} + ' ₡'">0 ₡</span>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mb-2">
+                                    <i class="fas fa-check-circle me-2"></i>Confirmar Pedido
+                                </button>
+                                <a th:href="@{/carrito}" class="btn btn-secondary w-100">
+                                    <i class="fas fa-arrow-left me-2"></i>Volver al Carrito
+                                </a>
+
+                                <div class="mt-3 text-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-lock me-1"></i>Tus datos están seguros con nosotros
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
