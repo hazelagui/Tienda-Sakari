@@ -1,9 +1,8 @@
 -- =====================================================
 -- SAKARI - Script Completo de Base de Datos
--- Ejecutar este script en MySQL Workbench o línea de comandos
 -- =====================================================
 
--- Eliminar base de datos si existe (CUIDADO: borra todos los datos)
+-- Eliminar base de datos si existe 
 -- DROP DATABASE IF EXISTS sakari_db;
 
 -- Crear la base de datos
