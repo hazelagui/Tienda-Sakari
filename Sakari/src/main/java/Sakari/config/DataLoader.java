@@ -112,7 +112,7 @@ public class DataLoader implements CommandLineRunner {
         p1.setDescripcion("Camiseta 100% poliéster blanca de alta calidad, ideal para sublimación full color. Disponible en tallas S, M, L, XL. Acabado suave y cómodo.");
         p1.setPrecio(new BigDecimal("8500.00"));
         p1.setStock(50);
-        p1.setImagenUrl("https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop");
+        p1.setImagenUrl("https://images-na.ssl-images-amazon.com/images/I/51UTLAXYz8L._AC_UL600_SR600,600_.jpg");
         p1.setPersonalizable(true);
         p1.setActivo(true);
         p1.setCategoria(camisetas);
@@ -125,7 +125,7 @@ public class DataLoader implements CommandLineRunner {
         p2.setDescripcion("Camiseta deportiva de poliéster negro con zonas sublimables. Perfecta para equipos deportivos. Tallas S-XL.");
         p2.setPrecio(new BigDecimal("9500.00"));
         p2.setStock(30);
-        p2.setImagenUrl("https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop");
+        p2.setImagenUrl("https://www.shutterstock.com/image-vector/blank-tee-shirt-vector-mockup-600nw-2475398061.jpg");
         p2.setPersonalizable(true);
         p2.setActivo(true);
         p2.setCategoria(camisetas);
@@ -138,7 +138,7 @@ public class DataLoader implements CommandLineRunner {
         p3.setDescripcion("Taza mágica que revela tu diseño con el calor. Sorprende a todos con este efecto especial. Capacidad 11oz.");
         p3.setPrecio(new BigDecimal("6500.00"));
         p3.setStock(40);
-        p3.setImagenUrl("https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400&h=400&fit=crop");
+        p3.setImagenUrl("https://tiendadepromocionales.com/cdn/shop/products/TAZAMAGICAPARASUBLIMAR2_800x.jpg?v=1624036275");
         p3.setPersonalizable(true);
         p3.setActivo(true);
         p3.setCategoria(tazas);
@@ -151,7 +151,7 @@ public class DataLoader implements CommandLineRunner {
         p4.setDescripcion("Taza de cerámica premium 11oz, superficie perfecta para sublimación de alta definición.");
         p4.setPrecio(new BigDecimal("4500.00"));
         p4.setStock(100);
-        p4.setImagenUrl("https://images.unsplash.com/photo-1572119865084-43c285814d63?w=400&h=400&fit=crop");
+        p4.setImagenUrl("https://m.media-amazon.com/images/I/41yI4AC5PGL._AC_UF894,1000_QL80_.jpg");
         p4.setPersonalizable(true);
         p4.setActivo(true);
         p4.setCategoria(tazas);
@@ -173,11 +173,11 @@ public class DataLoader implements CommandLineRunner {
 
         // Producto 6 - Cojín
         Producto p6 = new Producto();
-        p6.setNombre("Cojín Decorativo Premium");
+        p6.setNombre("Cojín");
         p6.setDescripcion("Cojín con funda sublimable 40x40cm. Incluye relleno de alta calidad. Perfecto para decorar cualquier espacio.");
         p6.setPrecio(new BigDecimal("12000.00"));
         p6.setStock(20);
-        p6.setImagenUrl("https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=400&fit=crop");
+        p6.setImagenUrl("https://i.pinimg.com/originals/86/f4/6e/86f46e694745bdb4d7a21fd2bdc6d3fa.png");
         p6.setPersonalizable(true);
         p6.setActivo(true);
         p6.setCategoria(cojines);
@@ -190,7 +190,7 @@ public class DataLoader implements CommandLineRunner {
         p7.setDescripcion("Llavero de metal cromado con área sublimable. Duradero y elegante. Ideal para regalos personalizados.");
         p7.setPrecio(new BigDecimal("2500.00"));
         p7.setStock(75);
-        p7.setImagenUrl("https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?w=400&h=400&fit=crop");
+        p7.setImagenUrl("https://tiendatransfer.com/5144-large_default/llavero-metalico-redondo.jpg");
         p7.setPersonalizable(true);
         p7.setActivo(true);
         p7.setCategoria(llaveros);
@@ -199,11 +199,11 @@ public class DataLoader implements CommandLineRunner {
 
         // Producto 8 - Mousepad
         Producto p8 = new Producto();
-        p8.setNombre("Mousepad XL Gamer");
+        p8.setNombre("Mousepad");
         p8.setDescripcion("Mousepad con superficie de tela sublimable de alta precisión. Tamaño 30x25cm. Base antideslizante.");
         p8.setPrecio(new BigDecimal("5500.00"));
         p8.setStock(35);
-        p8.setImagenUrl("https://images.unsplash.com/photo-1527814050087-3793815479db?w=400&h=400&fit=crop");
+        p8.setImagenUrl("https://www.serigraficos.com/wp-content/uploads/2021/12/01-2.jpg");
         p8.setPersonalizable(true);
         p8.setActivo(true);
         p8.setCategoria(otros);
@@ -216,7 +216,7 @@ public class DataLoader implements CommandLineRunner {
         p9.setDescripcion("Bolso tipo tote de canvas resistente con amplia área sublimable. Ecológico y reutilizable.");
         p9.setPrecio(new BigDecimal("8000.00"));
         p9.setStock(15);
-        p9.setImagenUrl("https://images.unsplash.com/photo-1597633425046-08f5110420b5?w=400&h=400&fit=crop");
+        p9.setImagenUrl("https://m.media-amazon.com/images/I/61TRnaxSBaL._AC_SL1500_.jpg");
         p9.setPersonalizable(true);
         p9.setActivo(true);
         p9.setCategoria(otros);
@@ -229,7 +229,7 @@ public class DataLoader implements CommandLineRunner {
         p10.setDescripcion("Rompecabezas sublimable tamaño A4 con 120 piezas. Transforma tus fotos en un regalo único y divertido.");
         p10.setPrecio(new BigDecimal("7500.00"));
         p10.setStock(30);
-        p10.setImagenUrl("https://images.unsplash.com/photo-1606503153255-59d8b8b82176?w=400&h=400&fit=crop");
+        p10.setImagenUrl("https://www.copiroyal.com/wp-content/uploads/2016/10/copiroyal-soluciones-grafing-detalleria-rompecabezas.jpg");
         p10.setPersonalizable(true);
         p10.setActivo(true);
         p10.setCategoria(otros);
@@ -250,7 +250,7 @@ public class DataLoader implements CommandLineRunner {
             admin.setEmail("admin@sakari.com");
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setTelefono("88735743");
-            admin.setDireccion("San José, Costa Rica");
+            admin.setDireccion("Heredia, Costa Rica");
             admin.setRol("ADMIN");
             admin.setActivo(true);
             admin.setFechaRegistro(LocalDateTime.now());

@@ -35,7 +35,7 @@ public class PasswordResetController {
             "Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña. " +
             "Por favor revisa tu bandeja de entrada y spam.");
         
-        // En un entorno real, aquí enviaríamos el email con el enlace
+
         // Para desarrollo, mostramos el token en consola
         tokenOpt.ifPresent(token -> {
             log.info("========================================");
